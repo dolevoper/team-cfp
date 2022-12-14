@@ -1,0 +1,21 @@
+header {
+    margin: 16px 0;
+}
+
+main {
+    margin: 0 16px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+input, select, textarea {
+    width: 100%;
+}
+
+textarea {
+    resize: none;
+}

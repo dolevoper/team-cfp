@@ -1,0 +1,35 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+img {
+    display: block;
+    width: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 1.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input, select, textarea, button {
+    font-size: inherit;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+
+ul, ol {
+    list-style-position: inside;
+}
