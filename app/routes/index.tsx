@@ -10,7 +10,7 @@ export const loader = async () =>
   });
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesUrl }
+  { rel: "stylesheet", href: stylesUrl },
 ];
 
 export default function Index() {
@@ -18,17 +18,15 @@ export default function Index() {
 
   return (
     <>
-      <header>
+      <header className="page-header">
         <h1>Proposals</h1>
       </header>
-      <main>
-        <Link to="new">Submit proposal</Link>
-        <ul>
-          {proposals.map(({ id, title }) => (
-            <li key={id}>{title}</li>
-          ))}
-        </ul>
-      </main>
+      <Link to="new">Submit proposal</Link>
+      <ul>
+        {proposals.map(({ id, title }) => (
+          <li key={id}>{title}</li>
+        ))}
+      </ul>
     </>
   );
 }

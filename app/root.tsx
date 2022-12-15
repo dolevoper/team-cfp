@@ -1,5 +1,6 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -8,6 +9,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import stylesUrl from "./root.css";
+import desktopStylesUrl from "./root.desktop.css";
+import { desktopMediaQuery } from "./utils/media-queries";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -16,7 +19,8 @@ export const meta: MetaFunction = () => ({
 });
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesUrl }
+  { rel: "stylesheet", href: stylesUrl },
+  { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery }
 ];
 
 export default function App() {
@@ -27,7 +31,12 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <header id="app-header">
+          <Link to="/">Team-CFP</Link>
+        </header>
+        <main>
+          <Outlet />
+        </main>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

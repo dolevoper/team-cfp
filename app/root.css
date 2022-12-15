@@ -1,9 +1,16 @@
-*, *::after, *::before {
-    box-sizing: border-box;
+:root {
+    --primary-color: #0078d4;
+    --gray-10: #faf9f8;
+    --red: #d13438;
+
+    --depth-4: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108);
+    --depth-8: 0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108);
+    --depth-16: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
+    --depth-64: 0 25.6px 57.6px 0 rgba(0, 0, 0, 0.22), 0 4.8px 14.4px 0 rgba(0, 0, 0, 0.18);
 }
 
-html, body {
-    height: 100%;
+*, *::after, *::before {
+    box-sizing: border-box;
 }
 
 img {
@@ -16,14 +23,25 @@ img {
     padding: 0;
 }
 
+html, body {
+    height: 100%;
+}
+
 html {
     font-size: 1.5rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body {
+    background: var(--gray-10);
+    display: flex;
+    flex-direction: column;
+}
+
 input, select, textarea, button {
     font-size: inherit;
     display: block;
+    padding: 2px 4px;
 }
 
 a {
@@ -32,4 +50,30 @@ a {
 
 ul, ol {
     list-style-position: inside;
+}
+
+#app-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 4px 16px 8px 16px;
+}
+
+#app-header a {
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+main {
+    padding: 16px;
+    background: white;
+    flex: 1;
+}
+
+h1 {
+    font-size: 1.3rem;
+}
+
+.page-header {
+    margin-bottom: 14px;
 }

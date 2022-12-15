@@ -69,51 +69,49 @@ export default function New() {
 
   return (
     <>
-      <header>
+      <header className="page-header">
         <h1>Submit proposal</h1>
         <Link to="/">Back</Link>
       </header>
-      <main>
-        <form method="post">
-          <label htmlFor="title-input">Title</label>
-          <input
-            id="title-input"
-            name="title"
-            required
-            defaultValue={actionData?.fields.title}
-          />
-          <label htmlFor="type-select">Type</label>
-          <select
-            id="type-select"
-            name="type"
-            defaultValue={actionData?.fields.type}
-          >
-            <option></option>
-            <option>Talk</option>
-            <option>Workshop</option>
-          </select>
-          <label htmlFor="length-select">Length</label>
-          <select
-            id="length-select"
-            name="length"
-            defaultValue={actionData?.fields.length}
-          >
-            <option></option>
-            <option>15 mins</option>
-            <option>30 mins</option>
-            <option>45 mins</option>
-            <option>1 hour</option>
-          </select>
-          <label htmlFor="description-input">Description</label>
-          <textarea
-            id="description-input"
-            name="description"
-            rows={6}
-            defaultValue={actionData?.fields.description}
-          />
-          <button type="submit">Submit</button>
-        </form>
-      </main>
+      <form method="post">
+        <label htmlFor="title-input">Title</label>
+        <input
+          id="title-input"
+          name="title"
+          required
+          defaultValue={actionData?.fields.title}
+        />
+        <label htmlFor="type-select">Type</label>
+        <select
+          id="type-select"
+          name="type"
+          defaultValue={actionData?.fields.type}
+        >
+          <option></option>
+          <option>Talk</option>
+          <option>Workshop</option>
+        </select>
+        <label htmlFor="length-select">Length</label>
+        <select
+          id="length-select"
+          name="length"
+          defaultValue={actionData?.fields.length}
+        >
+          <option></option>
+          <option>15 mins</option>
+          <option>30 mins</option>
+          <option>45 mins</option>
+          <option>1 hour</option>
+        </select>
+        <label htmlFor="description-input">Description</label>
+        <textarea
+          id="description-input"
+          name="description"
+          rows={6}
+          defaultValue={actionData?.fields.description}
+        />
+        <button type="submit">Submit</button>
+      </form>
     </>
   );
 }

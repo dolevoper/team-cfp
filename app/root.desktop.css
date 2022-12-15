@@ -1,0 +1,12 @@
+main {
+    width: 80vw;
+    min-height: 60vh;
+    padding: 64px;
+    margin: 0 auto;
+    box-shadow: var(--depth-4);
+    flex: none;
+}
+
+.page-header {
+    margin-bottom: 64px;
+}
