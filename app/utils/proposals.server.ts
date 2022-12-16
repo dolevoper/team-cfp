@@ -1,23 +1,4 @@
-function validateEnum<T extends readonly any[]>(options: T) {
-    return function (x: any): x is T[number] {
-        return options.some((option) => option === x);
-    };
-}
-
-const proposalTypes = ["", "Talk", "Workshop"] as const;
-export const isValidProposalType = validateEnum(proposalTypes);
-
-const proposalLength = ["", "15 mins", "30 mins", "45 mins", "1 hour"] as const;
-export const isValidProposalLength = validateEnum(proposalLength);
-
-export interface Proposal {
-    id: string;
-    title: string;
-    type: typeof proposalTypes[number];
-    length: typeof proposalLength[number];
-    description: string;
-    createdAt: Date;
-}
+import type { Proposal } from "./proposals.model";
 
 declare global {
     var __proposals: Proposal[];
