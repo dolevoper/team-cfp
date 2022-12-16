@@ -8,9 +8,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import stylesUrl from "./root.css";
-import desktopStylesUrl from "./root.desktop.css";
-import { desktopMediaQuery } from "./utils/media-queries";
+import stylesUrl from "~/styles/root.css";
+import desktopStylesUrl from "~/styles/root.desktop.css";
+import { desktopMediaQuery } from "~/utils/media-queries";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",

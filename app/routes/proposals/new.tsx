@@ -9,9 +9,9 @@ import {
   isValidProposalType,
   submitProposal,
 } from "~/utils/proposals.server";
-import stylesUrl from "./new.css";
-import tabletStylesUrl from "./new.tablet.css";
-import desktopStylesUrl from "./new.desktop.css";
+import stylesUrl from "~/styles/proposals.new.css";
+import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
+import desktopStylesUrl from "~/styles/proposals.new.desktop.css";
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
@@ -110,7 +110,7 @@ export default function New() {
           rows={6}
           defaultValue={actionData?.fields.description}
         />
-        <button type="submit">Submit</button>
+        <button type="submit" data-button-primary>Submit</button>
       </form>
     </>
   );

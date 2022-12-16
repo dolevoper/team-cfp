@@ -3,8 +3,13 @@ form {
     grid-template-columns: auto 1fr auto 1fr;
 }
 
-textarea, button {
+textarea {
     grid-column: 1 / 5;
+}
+
+button[type="submit"] {
+    grid-column: 4 / 5;
+    justify-self: end;
 }
 
 input[name="title"] {

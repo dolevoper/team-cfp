@@ -1,0 +1,19 @@
+[data-grid] li {
+    list-style: none;
+    border-bottom: 1px solid #f3f2f1;
+    padding: 4px 16px 8px 16px;
+    margin-left: -16px;
+    margin-right: -16px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    [data-grid] li:hover {
+        background: #f3f2f1;
+    }
+}
+
+a[href="/proposals/new"] {
+    margin: 16px 0;
+    margin-left: auto;
+    padding-top: 10px;
+}

@@ -13,7 +13,7 @@ textarea {
 }
 
 label[for="title-input"] {
-    font-weight: 700;
+    font-weight: 600;
 }
 
 label[for="title-input"]::after {
