@@ -18,7 +18,7 @@ export default function Index() {
 
   return (
     <>
-      <header className="page-header">
+      <header data-page-header>
         <h1>Proposals</h1>
       </header>
       <Link to="proposals/new" data-button-primary>Submit proposal</Link>

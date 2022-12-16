@@ -16,6 +16,7 @@ export interface Proposal {
     type: typeof proposalTypes[number];
     length: typeof proposalLength[number];
     description: string;
+    createdAt: Date;
 }
 
 declare global {
@@ -33,7 +34,7 @@ const proposalIdIndex = global.__proposalIdIndex;
 
 export class ConflictError extends Error {}
 
-export async function submitProposal(proposal: Proposal) {
+export async function submitProposal(proposal: Omit<Proposal, "createdAt">) {
     const { id } = proposal;
 
     if (proposalIdIndex.has(id)) {
@@ -41,9 +42,17 @@ export async function submitProposal(proposal: Proposal) {
     }
 
     proposalIdIndex.set(id, proposals.length);
-    proposals.push(proposal);
+    proposals.push({ ...proposal, createdAt: new Date() });
 }
 
 export async function getAllProposals() {
     return proposals.map((proposal) => ({ ...proposal }));
+}
+
+export async function getProposalById(id: string): Promise<Proposal | undefined> {
+    if (!proposalIdIndex.has(id)) {
+        return;
+    }
+
+    return proposals[proposalIdIndex.get(id)!];
 }

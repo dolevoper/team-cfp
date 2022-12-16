@@ -74,7 +74,7 @@ h1 {
     font-size: 1.3rem;
 }
 
-.page-header {
+[data-page-header] {
     margin-bottom: 14px;
 }
 

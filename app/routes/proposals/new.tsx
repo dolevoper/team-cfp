@@ -69,7 +69,7 @@ export default function New() {
 
   return (
     <>
-      <header className="page-header">
+      <header data-page-header>
         <h1>Submit proposal</h1>
         <Link to="/">Back</Link>
       </header>
