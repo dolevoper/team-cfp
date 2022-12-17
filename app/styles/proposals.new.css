@@ -17,6 +17,6 @@ label[for="title-input"] {
 }
 
 label[for="title-input"]::after {
-    content: "*";
+    content: " *";
     color: var(--red);
 }

@@ -40,7 +40,7 @@ export default function ViewProposal() {
         {proposal.type && <div>Type: {proposal.type}</div>}
         {proposal.length && <div>Length: {proposal.length}</div>}
       </section>
-      {proposal.description && <section>{proposal.description}</section>}
+      {proposal.description && <section id="description">{proposal.description}</section>}
     </>
   );
 }

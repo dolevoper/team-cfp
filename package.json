@@ -4,7 +4,8 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
-    "start": "remix-serve build",
+    "__start": "remix-serve build",
+    "start": "node node_modules/@remix-run/serve/dist/cli.js build",
     "typecheck": "tsc -b"
   },
   "dependencies": {

@@ -44,8 +44,15 @@ body {
 
 input, select, textarea, button {
     font-size: inherit;
+    font-family: inherit;
     display: block;
-    padding: 2px 4px;
+    padding: 9px 8px;
+}
+
+input, textarea {
+    border: 1px solid black;
+    border-radius: 2px;
+    outline-color: var(--primary-color);
 }
 
 a {
