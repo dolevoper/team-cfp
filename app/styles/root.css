@@ -1,6 +1,10 @@
 :root {
     --primary-color: #0078d4;
+    --primary-color-dark-alt: #106ebe;
+
     --gray-10: #faf9f8;
+    --gray-20: #f3f2f1;
+    
     --red: #d13438;
 
     --depth-4: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108);
@@ -89,4 +93,9 @@ h1 {
     border-radius: 2px;
     font-size: 0.7rem;
     border: 0;
+    cursor: pointer;
+}
+
+[data-button-primary]:hover {
+    background: var(--primary-color-dark-alt);
 }
