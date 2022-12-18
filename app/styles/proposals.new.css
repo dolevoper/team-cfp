@@ -20,3 +20,7 @@ label[for="title-input"]::after {
     content: " *";
     color: var(--red);
 }
+
+[data-dropdown-option][data-value=""] {
+    color: var(--red);
+}

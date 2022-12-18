@@ -14,7 +14,7 @@ import { submitProposal } from "~/utils/proposals.server";
 import stylesUrl from "~/styles/proposals.new.css";
 import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
 import desktopStylesUrl from "~/styles/proposals.new.desktop.css";
-import Dropdown from "~/components/Dropdown";
+import { Dropdown, Option } from "~/components/Dropdown";
 
 const listFormatter = new Intl.ListFormat("en", { type: "disjunction" });
 const quote = (str: string) => `"${str}"`;
@@ -102,28 +102,21 @@ export default function New() {
           defaultValue={actionData?.fields?.title}
         />
         <label htmlFor="type-select">Type</label>
-        <Dropdown>
+        <Dropdown name="type" id="type-select" defaultValue={actionData?.fields?.type}>
           {proposalTypes.map((value, i) => (
-            <div key={i}>{value}</div>
+            !value ? <Option key={i} displayText="">Clear</Option> : <Option key={i}>{value}</Option>
           ))}
         </Dropdown>
-        {/* <select
-          id="type-select"
-          name="type"
-          defaultValue={actionData?.fields?.type}
-        >
-          {proposalTypes.map((value, i) => <option key={i}>{value}</option>)}
-        </select> */}
         <label htmlFor="length-select">Length</label>
-        <select
+        <Dropdown
           id="length-select"
           name="length"
           defaultValue={actionData?.fields?.length}
         >
           {proposalLengths.map((value, i) => (
-            <option key={i}>{value}</option>
+            !value ? <Option key={i} displayText="">Clear</Option> : <Option key={i}>{value}</Option>
           ))}
-        </select>
+        </Dropdown>
         <label htmlFor="description-input">Description</label>
         <textarea
           id="description-input"

@@ -50,9 +50,10 @@ input, select, textarea, button {
     font-family: inherit;
     display: block;
     padding: 9px 8px;
+    appearance: none;
 }
 
-input, textarea {
+input, textarea, select {
     border: 1px solid black;
     border-radius: 2px;
     outline-color: var(--primary-color);
@@ -66,6 +67,17 @@ ul, ol {
     list-style-position: inside;
 }
 
+main {
+    padding: 16px;
+    background: white;
+    flex: 1;
+}
+
+h1 {
+    font-size: 1.3rem;
+}
+
+/******************** App Header ********************/
 #app-header {
     background: var(--primary-color);
     color: white;
@@ -115,20 +127,12 @@ ul, ol {
     font-weight: 600;
 }
 
-main {
-    padding: 16px;
-    background: white;
-    flex: 1;
-}
-
-h1 {
-    font-size: 1.3rem;
-}
-
+/******************** Page Header ********************/
 [data-page-header] {
     margin-bottom: 14px;
 }
 
+/******************** Buttom Primary ********************/
 [data-button-primary] {
     display: block;
     background: var(--primary-color);
@@ -147,22 +151,41 @@ h1 {
     background: var(--primary-color-dark-alt);
 }
 
+[data-button-primary]:active {
+    background: var(--primary-color-darker);
+}
+
+/******************** Dropdown ********************/
 [data-dropdown] [data-dropdown-title] {
+    position: relative;
+    cursor: pointer;
     border: 1px solid black;
     border-radius: 2px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 8px;
-    padding-right: 8px;
-    cursor: pointer;
+    padding: 9px 8px;
+    min-height: 2.166666666rem;
     outline-color: var(--primary-color);
-    height: 100%;
 }
 
 [data-dropdown] [data-dropdown-title] [data-icon] {
+    --icon-size: 0.75rem;
+    position: absolute;
+    right: 8px;
+    top: 0;
+    bottom: 0;
+    height: var(--icon-size);
+    margin: auto;
     color: var(--gray-130);
-    font-size: 0.75rem;
+    font-size: var(--icon-size);
+}
+
+[data-dropdown] [data-dropdown-backdrop] {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / 0.3);
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity;
+    transition: opacity 100ms;
 }
 
 [data-dropdown] [data-dropdown-options] {
@@ -172,4 +195,23 @@ h1 {
     width: 100%;
     background: white;
     box-shadow: var(--depth-8);
+    transform: translateY(100%);
+    will-change: transform;
+    transition: transform ease-in 100ms;
+}
+
+[data-dropdown] [data-dropdown-title][aria-expanded="true"] + [data-dropdown-backdrop] + [data-dropdown-options] {
+    transform: none;
+}
+
+[data-dropdown] [data-dropdown-title][aria-expanded="true"] + [data-dropdown-backdrop] {
+    opacity: 1;
+    pointer-events: revert;
+}
+
+[data-dropdown] [data-dropdown-options] [data-dropdown-option] {
+    border: 0;
+    background: transparent;
+    width: 100%;
+    min-height: 2.0833333rem;
 }
