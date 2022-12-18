@@ -14,6 +14,7 @@ import { submitProposal } from "~/utils/proposals.server";
 import stylesUrl from "~/styles/proposals.new.css";
 import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
 import desktopStylesUrl from "~/styles/proposals.new.desktop.css";
+import Dropdown from "~/components/Dropdown";
 
 const listFormatter = new Intl.ListFormat("en", { type: "disjunction" });
 const quote = (str: string) => `"${str}"`;
@@ -25,14 +26,34 @@ export const action = async ({ request }: ActionArgs) => {
   const length = formData.get("length");
   const description = formData.get("description");
 
-  if (typeof title !== "string" || typeof type !== "string" || typeof length !== "string" || typeof description !== "string") {
-    return json({ fields: null, fieldErrors: null, formError: "Form not submitted correctly." }, { status: 400 });
+  if (
+    typeof title !== "string" ||
+    typeof type !== "string" ||
+    typeof length !== "string" ||
+    typeof description !== "string"
+  ) {
+    return json(
+      {
+        fields: null,
+        fieldErrors: null,
+        formError: "Form not submitted correctly.",
+      },
+      { status: 400 }
+    );
   }
 
   const fieldErrors = {
     title: title ? undefined : "The proposal must include a title.",
-    type: isValidProposalType(type) ? undefined : `Prorposal type must be ${listFormatter.format(proposalTypes.filter(Boolean).map(quote))}.`,
-    length: isValidProposalLength(length) ? undefined : `Prorposal length must be ${listFormatter.format(proposalLengths.filter(Boolean).map(quote))}.`
+    type: isValidProposalType(type)
+      ? undefined
+      : `Prorposal type must be ${listFormatter.format(
+          proposalTypes.filter(Boolean).map(quote)
+        )}.`,
+    length: isValidProposalLength(length)
+      ? undefined
+      : `Prorposal length must be ${listFormatter.format(
+          proposalLengths.filter(Boolean).map(quote)
+        )}.`,
   };
 
   if (Object.values(fieldErrors).some(Boolean)) {
@@ -40,7 +61,7 @@ export const action = async ({ request }: ActionArgs) => {
       {
         fields: { title, type, length, description },
         fieldErrors,
-        formError: null
+        formError: null,
       },
       { status: 400 }
     );
@@ -81,20 +102,27 @@ export default function New() {
           defaultValue={actionData?.fields?.title}
         />
         <label htmlFor="type-select">Type</label>
-        <select
+        <Dropdown>
+          {proposalTypes.map((value, i) => (
+            <div key={i}>{value}</div>
+          ))}
+        </Dropdown>
+        {/* <select
           id="type-select"
           name="type"
           defaultValue={actionData?.fields?.type}
         >
           {proposalTypes.map((value, i) => <option key={i}>{value}</option>)}
-        </select>
+        </select> */}
         <label htmlFor="length-select">Length</label>
         <select
           id="length-select"
           name="length"
           defaultValue={actionData?.fields?.length}
         >
-          {proposalLengths.map((value, i) => <option key={i}>{value}</option>)}
+          {proposalLengths.map((value, i) => (
+            <option key={i}>{value}</option>
+          ))}
         </select>
         <label htmlFor="description-input">Description</label>
         <textarea
@@ -103,7 +131,9 @@ export default function New() {
           rows={6}
           defaultValue={actionData?.fields?.description}
         />
-        <button type="submit" data-button-primary>Submit</button>
+        <button type="submit" data-button-primary>
+          Submit
+        </button>
       </Form>
     </>
   );

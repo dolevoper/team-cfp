@@ -10,3 +10,15 @@ main {
 [data-page-header] {
     margin-bottom: 64px;
 }
+
+[data-dropdown] {
+    position: relative;
+}
+
+[data-dropdown] [data-dropdown-options] {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    bottom: revert;
+    left: revert;
+}

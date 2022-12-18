@@ -4,6 +4,7 @@
 
     --gray-10: #faf9f8;
     --gray-20: #f3f2f1;
+    --gray-130: #605e5c;
     
     --red: #d13438;
 
@@ -105,4 +106,31 @@ h1 {
 
 [data-button-primary]:hover {
     background: var(--primary-color-dark-alt);
+}
+
+[data-dropdown] [data-dropdown-title] {
+    border: 1px solid black;
+    border-radius: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 8px;
+    padding-right: 8px;
+    cursor: pointer;
+    outline-color: var(--primary-color);
+    height: 100%;
+}
+
+[data-dropdown] [data-dropdown-title] [data-icon] {
+    color: var(--gray-130);
+    font-size: 0.75rem;
+}
+
+[data-dropdown] [data-dropdown-options] {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: var(--depth-8);
 }
