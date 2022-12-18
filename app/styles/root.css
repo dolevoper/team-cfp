@@ -1,12 +1,14 @@
 :root {
     --primary-color: #0078d4;
     --primary-color-dark-alt: #106ebe;
+    --primary-color-darker: #004578;
 
     --gray-10: #faf9f8;
     --gray-20: #f3f2f1;
     --gray-130: #605e5c;
     
     --red: #d13438;
+    --magenta-20: #881798;
 
     --depth-4: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108);
     --depth-8: 0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108);
@@ -67,13 +69,50 @@ ul, ol {
 #app-header {
     background: var(--primary-color);
     color: white;
-    padding: 4px 16px 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
 #app-header a {
+    padding: 8px 16px;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.8rem;
+}
+
+#app-header [data-username] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #app-header [data-username]:hover {
+        background: var(--primary-color-dark-alt);
+    }
+}
+
+#app-header [data-username]:active {
+    background: var(--primary-color-darker);
+}
+
+#app-header [data-username] span {
+    --container-size: 1.2rem;
+    background: var(--magenta-20);
+    border-radius: 50%;
+    font-size: 0.6rem;
+    width: var(--container-size);
+    height: var(--container-size);
+    line-height: var(--container-size);
+    text-align: center;
+    font-weight: 600;
 }
 
 main {

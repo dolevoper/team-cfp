@@ -16,8 +16,17 @@ import iconsStylesUrl from "~/styles/fabric-icons.css";
 import { desktopMediaQuery } from "~/utils/media-queries";
 
 export const loader = ({ request }: LoaderArgs) => {
-  console.log(request.headers);
-  return json({ headers: Object.fromEntries(request.headers.entries()) });
+  const idToken = request.headers.get("x-ms-token-aad-id-token") ?? process.env.ID_TOKEN;
+
+  if (!idToken) {
+    throw new Response("Unauthorized", { status: 401 });
+  }
+
+  const [, encodedTokenString] = idToken.split(".");
+  const token = JSON.parse(Buffer.from(encodedTokenString, "base64").toString()) as Record<string, string>;
+  const { name, preferred_username } = token;
+
+  return json({ user: { name, preferredUsername: preferred_username } });
 };
 
 export const meta: MetaFunction = () => ({
@@ -44,11 +53,13 @@ export default function App() {
       <body>
         <header id="app-header">
           <Link to="/">Team-CFP</Link>
+          <button data-username title={`${data.user.name} (${data.user.preferredUsername})`}>
+            <span>{data.user.name.split(" ").slice(0, 2).map((part) => part.charAt(0).toUpperCase()).join("")}</span>
+          </button>
         </header>
         <main>
           <Outlet />
         </main>
-        <pre>{JSON.stringify(data.headers, null, 4)}</pre>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
