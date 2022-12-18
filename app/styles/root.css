@@ -214,4 +214,11 @@ h1 {
     background: transparent;
     width: 100%;
     min-height: 2.0833333rem;
+    cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    [data-dropdown] [data-dropdown-options] [data-dropdown-option]:hover {
+        background: var(--gray-20);
+    }
 }

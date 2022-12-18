@@ -7,10 +7,12 @@ main {
     flex: none;
 }
 
+/******************** Page Header ********************/
 [data-page-header] {
     margin-bottom: 64px;
 }
 
+/******************** Dropdown ********************/
 [data-dropdown] {
     position: relative;
 }
@@ -21,4 +23,10 @@ main {
     width: 100%;
     bottom: revert;
     left: revert;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+[data-dropdown] [data-dropdown-backdrop] {
+    display: none;
 }

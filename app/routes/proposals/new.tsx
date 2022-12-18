@@ -99,6 +99,7 @@ export default function New() {
           id="title-input"
           name="title"
           required
+          autoFocus
           defaultValue={actionData?.fields?.title}
         />
         <label htmlFor="type-select">Type</label>
