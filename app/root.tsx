@@ -60,6 +60,7 @@ export default function App() {
         <main>
           <Outlet />
         </main>
+        <div id="dialogs"></div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

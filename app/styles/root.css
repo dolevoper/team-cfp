@@ -178,38 +178,51 @@ h1 {
     font-size: var(--icon-size);
 }
 
-[data-dropdown] [data-dropdown-backdrop] {
+[data-dropdown-backdrop] {
     position: fixed;
     inset: 0;
     background: rgb(0 0 0 / 0.3);
-    opacity: 0;
-    pointer-events: none;
     will-change: opacity;
+}
+
+[data-dropdown-backdrop][data-transition="enter"] {
+    animation: fade-in 100ms;
+}
+
+[data-dropdown-backdrop][data-transition="exit"] {
+    opacity: 0;
     transition: opacity 100ms;
 }
 
-[data-dropdown] [data-dropdown-options] {
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+[data-dropdown-options] {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     background: white;
-    box-shadow: var(--depth-8);
-    transform: translateY(100%);
     will-change: transform;
-    transition: transform ease-in 100ms;
 }
 
-[data-dropdown] [data-dropdown-title][aria-expanded="true"] + [data-dropdown-backdrop] + [data-dropdown-options] {
-    transform: none;
+[data-dropdown-options][data-transition="enter"] {
+    animation: pop-up 100ms ease-out;
 }
 
-[data-dropdown] [data-dropdown-title][aria-expanded="true"] + [data-dropdown-backdrop] {
-    opacity: 1;
-    pointer-events: revert;
+[data-dropdown-options][data-transition="exit"] {
+    transform: translateY(100%);
+    transition: transform 100ms ease-in;
 }
 
-[data-dropdown] [data-dropdown-options] [data-dropdown-option] {
+@keyframes pop-up {
+    0% { transform: translateY(100%); }
+    100% { transform: none; }
+}
+
+[data-dropdown-options] [data-dropdown-option] {
     border: 0;
     background: transparent;
     width: 100%;
@@ -218,7 +231,7 @@ h1 {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    [data-dropdown] [data-dropdown-options] [data-dropdown-option]:hover {
+    [data-dropdown-options] [data-dropdown-option]:hover {
         background: var(--gray-20);
     }
 }

@@ -25,8 +25,11 @@ main {
     left: revert;
     transform: scaleY(0);
     transform-origin: top;
+    will-change: transform;
+    transition: transform 100ms;
+    box-shadow: var(--depth-8);
 }
 
-[data-dropdown] [data-dropdown-backdrop] {
-    display: none;
+[data-dropdown] [data-dropdown-title][aria-expanded="true"] + [data-dropdown-options] {
+    transform: none;
 }

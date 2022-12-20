@@ -1,17 +1,18 @@
 import type { PropsWithChildren } from "react";
 import {
   createContext,
-  useReducer,
   useContext,
   useState,
   useRef,
   Children,
   useEffect,
 } from "react";
+import { createPortal } from "react-dom";
+import { useAnimation, useIsDesktopMode, useToggle } from "~/utils/hooks";
 import Icon from "./Icon";
 
 type DropdownContext = {
-  createSelector(value?: string, displayText?: string): (e: any) => void;
+  createSelector(value?: string, displayText?: string): ((e: any) => void) | undefined;
 };
 const context = createContext<DropdownContext | undefined>(undefined);
 
@@ -21,8 +22,10 @@ type DropdownProps = PropsWithChildren & {
   defaultValue?: string | number;
 };
 export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
-  const [isOpen, toggleIsOpen] = useReducer((value) => !value, false);
+  const [isOpen, toggleIsOpen] = useToggle();
   const [selection, setSelection] = useState("");
+  const isDesktopMode = useIsDesktopMode();
+  const { animationProps, triggerEnterAnd, triggerExitAnd } = useAnimation();
   const inputRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
@@ -48,10 +51,53 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
       doSelection();
     }
 
-    return (e: MouseEvent) => {
+    return triggerExitAnd((e: MouseEvent) => {
       e.preventDefault();
       doSelection();
-    };
+    });
+  }
+
+  let options;
+
+  if (typeof document !== "undefined") {
+    if (isDesktopMode) {
+      options = (
+        <>
+          <div
+            data-dropdown-options
+            onBlur={(e) => {
+              if (
+                !isOpen ||
+                e.relatedTarget === titleRef.current ||
+                e.target.contains(e.relatedTarget)
+              ) {
+                return;
+              }
+
+              toggleIsOpen();
+            }}
+            ref={optionsRef}
+            tabIndex={0}
+          >
+            <context.Provider value={{ createSelector }}>
+              {children}
+            </context.Provider>
+          </div>
+        </>
+      );
+    } else if (isOpen) {
+      options = createPortal(
+        <>
+          <div data-dropdown-backdrop {...animationProps} onClick={triggerExitAnd(toggleIsOpen)}></div>
+          <div data-dropdown-options {...animationProps} ref={optionsRef} tabIndex={0}>
+            <context.Provider value={{ createSelector }}>
+              {children}
+            </context.Provider>
+          </div>
+        </>,
+        document.getElementById("dialogs")!
+      );
+    }
   }
 
   return (
@@ -63,39 +109,19 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
           tabIndex={0}
           aria-expanded={isOpen}
           ref={titleRef}
-          onClick={() => {
+          onClick={triggerEnterAnd(() => {
             toggleIsOpen();
-
+            
             if (!isOpen) {
-              // optionsRef.current?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-              optionsRef.current?.focus();
+                // optionsRef.current?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+                optionsRef.current?.focus();
             }
-          }}
+          })}
         >
           <span>{selection}</span>
           <Icon iconName="ChevronDown" />
         </div>
-        <div data-dropdown-backdrop onClick={toggleIsOpen}></div>
-        <div
-          data-dropdown-options
-          onBlur={(e) => {
-            if (
-              !isOpen ||
-              e.relatedTarget === titleRef.current ||
-              e.target.contains(e.relatedTarget)
-            ) {
-              return;
-            }
-
-            toggleIsOpen();
-          }}
-          ref={optionsRef}
-          tabIndex={0}
-        >
-          <context.Provider value={{ createSelector }}>
-            {children}
-          </context.Provider>
-        </div>
+        {options}
       </div>
     </>
   );
