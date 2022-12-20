@@ -1,4 +1,9 @@
-import type { PropsWithChildren } from "react";
+import type {
+  Dispatch,
+  DispatchWithoutAction,
+  PropsWithChildren,
+  SetStateAction,
+} from "react";
 import {
   createContext,
   useContext,
@@ -8,11 +13,16 @@ import {
   useEffect,
 } from "react";
 import { createPortal } from "react-dom";
-import { useAnimation, useIsDesktopMode, useToggle } from "~/utils/hooks";
+import { useIsDesktopMode, useToggle } from "~/utils/hooks";
 import Icon from "./Icon";
 
+type OptionDef = { value: string | number; displayText: string };
 type DropdownContext = {
-  createSelector(value?: string, displayText?: string): ((e: any) => void) | undefined;
+  options: OptionDef[];
+  setOptions: Dispatch<SetStateAction<OptionDef[]>>;
+  value: string | number;
+  setValue: Dispatch<SetStateAction<string | number>>;
+  toggleIsOpen: DispatchWithoutAction;
 };
 const context = createContext<DropdownContext | undefined>(undefined);
 
@@ -22,46 +32,19 @@ type DropdownProps = PropsWithChildren & {
   defaultValue?: string | number;
 };
 export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
+  const [options, setOptions] = useState<OptionDef[]>([]);
+  const [value, setValue] = useState<string | number>(defaultValue ?? "");
   const [isOpen, toggleIsOpen] = useToggle();
-  const [selection, setSelection] = useState("");
   const isDesktopMode = useIsDesktopMode();
-  const { animationProps, triggerEnterAnd, triggerExitAnd } = useAnimation();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const selectRef = useRef<HTMLSelectElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
-  const loaded = useRef(false);
 
-  useEffect(() => {
-    loaded.current = true;
-  }, []);
-
-  function createSelector(value?: string, displayText?: string) {
-    function doSelection() {
-      setSelection(displayText ?? value ?? "");
-      toggleIsOpen();
-
-      if (!inputRef.current) {
-        return;
-      }
-
-      inputRef.current.value = value ?? displayText ?? "";
-    }
-
-    if (!loaded.current && (value ?? displayText) === defaultValue) {
-      doSelection();
-    }
-
-    return triggerExitAnd((e: MouseEvent) => {
-      e.preventDefault();
-      doSelection();
-    });
-  }
-
-  let options;
+  let listbox;
 
   if (typeof document !== "undefined") {
     if (isDesktopMode) {
-      options = (
+      listbox = (
         <>
           <div
             data-dropdown-options
@@ -79,20 +62,25 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
             ref={optionsRef}
             tabIndex={0}
           >
-            <context.Provider value={{ createSelector }}>
-              {children}
-            </context.Provider>
+            {children}
           </div>
         </>
       );
-    } else if (isOpen) {
-      options = createPortal(
+    } else {
+      listbox = createPortal(
         <>
-          <div data-dropdown-backdrop {...animationProps} onClick={triggerExitAnd(toggleIsOpen)}></div>
-          <div data-dropdown-options {...animationProps} ref={optionsRef} tabIndex={0}>
-            <context.Provider value={{ createSelector }}>
-              {children}
-            </context.Provider>
+          <div
+            data-dropdown-backdrop
+            data-is-open={isOpen}
+            onClick={toggleIsOpen}
+          ></div>
+          <div
+            data-dropdown-options
+            data-is-open={isOpen}
+            ref={optionsRef}
+            tabIndex={0}
+          >
+            {children}
           </div>
         </>,
         document.getElementById("dialogs")!
@@ -102,26 +90,41 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
 
   return (
     <>
-      <input type="hidden" name={name} id={id} ref={inputRef} />
       <div data-dropdown>
         <div
           data-dropdown-title
-          tabIndex={0}
           aria-expanded={isOpen}
           ref={titleRef}
-          onClick={triggerEnterAnd(() => {
+          onMouseDown={(e) => {
+            e.preventDefault();
             toggleIsOpen();
-            
+
             if (!isOpen) {
-                // optionsRef.current?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-                optionsRef.current?.focus();
+              // optionsRef.current?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+              optionsRef.current?.focus();
             }
-          })}
+          }}
         >
-          <span>{selection}</span>
+          <select
+            name={name}
+            id={id}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            ref={selectRef}
+          >
+            {options.map(({ value, displayText }) => (
+              <option key={value} value={value}>
+                {displayText}
+              </option>
+            ))}
+          </select>
           <Icon iconName="ChevronDown" />
         </div>
-        {options}
+        <context.Provider
+          value={{ options, setOptions, value, setValue, toggleIsOpen }}
+        >
+          {listbox}
+        </context.Provider>
       </div>
     </>
   );
@@ -148,10 +151,27 @@ export function Option({
   className,
   children,
 }: OptionProps) {
-  const { createSelector } = useDropdown();
+  const { setOptions, setValue, toggleIsOpen } = useDropdown();
   const stringContent = Children.toArray(children)
     .filter((child) => typeof child === "string")
     .join("");
+
+  const actualValue = value ?? displayText ?? stringContent;
+
+  useEffect(() => {
+    console.log("hi");
+    setOptions((options) => [
+      ...options,
+      { value: actualValue, displayText: displayText ?? stringContent },
+    ]);
+
+    return () => {
+      console.log("bye");
+      setOptions((options) =>
+        options.filter((opt) => opt.value !== actualValue)
+      );
+    };
+  }, [setOptions, displayText, stringContent, actualValue]);
 
   return (
     <button
@@ -159,7 +179,10 @@ export function Option({
       type="button"
       tabIndex={-1}
       className={className}
-      onClick={createSelector(value, displayText ?? stringContent)}
+      onClick={() => {
+        setValue(actualValue);
+        toggleIsOpen();
+      }}
       data-value={value ?? displayText ?? stringContent}
     >
       {children}
