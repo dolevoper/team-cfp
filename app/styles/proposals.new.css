@@ -21,6 +21,6 @@ label[for="title-input"]::after {
     color: var(--red);
 }
 
-[data-dropdown-option][data-value=""] {
+.clear-dropdown-selection {
     color: var(--red);
 }

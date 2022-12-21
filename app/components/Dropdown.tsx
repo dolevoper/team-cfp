@@ -2,6 +2,7 @@ import type {
   Dispatch,
   DispatchWithoutAction,
   PropsWithChildren,
+  ReactNode,
   SetStateAction,
 } from "react";
 import {
@@ -26,6 +27,9 @@ type DropdownContext = {
 };
 const context = createContext<DropdownContext | undefined>(undefined);
 
+const dialogsPortal =
+  typeof document !== "undefined" && document.getElementById("dialogs");
+
 type DropdownProps = PropsWithChildren & {
   name?: string;
   id?: string;
@@ -35,58 +39,36 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
   const [options, setOptions] = useState<OptionDef[]>([]);
   const [value, setValue] = useState<string | number>(defaultValue ?? "");
   const [isOpen, toggleIsOpen] = useToggle();
+  const [listbox, setListbox] = useState<ReactNode>();
   const isDesktopMode = useIsDesktopMode();
   const selectRef = useRef<HTMLSelectElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const optionsRef = useRef<HTMLDivElement>(null);
+  const listboxRef = useRef<HTMLUListElement>(null);
 
-  let listbox;
-
-  if (typeof document !== "undefined") {
-    if (isDesktopMode) {
-      listbox = (
-        <>
-          <div
-            data-dropdown-options
-            onBlur={(e) => {
-              if (
-                !isOpen ||
-                e.relatedTarget === titleRef.current ||
-                e.target.contains(e.relatedTarget)
-              ) {
-                return;
-              }
-
-              toggleIsOpen();
-            }}
-            ref={optionsRef}
-            tabIndex={0}
-          >
-            {children}
-          </div>
-        </>
+  useEffect(() => {
+    if (isDesktopMode || !dialogsPortal) {
+      setListbox(
+        <ul data-dropdown-options ref={listboxRef}>
+          {children}
+        </ul>
       );
     } else {
-      listbox = createPortal(
-        <>
-          <div
-            data-dropdown-backdrop
-            data-is-open={isOpen}
-            onClick={toggleIsOpen}
-          ></div>
-          <div
-            data-dropdown-options
-            data-is-open={isOpen}
-            ref={optionsRef}
-            tabIndex={0}
-          >
-            {children}
-          </div>
-        </>,
-        document.getElementById("dialogs")!
+      setListbox(
+        createPortal(
+          <>
+            <div
+              data-dropdown-backdrop
+              data-is-open={isOpen}
+              onClick={toggleIsOpen}
+            ></div>
+            <ul data-dropdown-options data-is-open={isOpen} tabIndex={0}>
+              {children}
+            </ul>
+          </>,
+          dialogsPortal
+        )
       );
     }
-  }
+  }, [isDesktopMode, children, isOpen, toggleIsOpen]);
 
   return (
     <>
@@ -94,14 +76,16 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
         <div
           data-dropdown-title
           aria-expanded={isOpen}
-          ref={titleRef}
           onMouseDown={(e) => {
+            if (!dialogsPortal && !isDesktopMode) {
+              return;
+            }
+
             e.preventDefault();
             toggleIsOpen();
 
             if (!isOpen) {
-              // optionsRef.current?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-              optionsRef.current?.focus();
+              selectRef.current?.focus();
             }
           }}
         >
@@ -109,8 +93,31 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
             name={name}
             id={id}
             value={value}
-            onChange={(e) => setValue(e.target.value)}
             ref={selectRef}
+            onChange={(e) => setValue(e.target.value)}
+            onBlur={(e) => {
+              if (
+                !isDesktopMode ||
+                !isOpen ||
+                listboxRef.current?.contains(e.relatedTarget)
+              ) {
+                return;
+              }
+
+              toggleIsOpen();
+            }}
+            onKeyDown={(e) => {
+              if (
+                [" ", "Enter"].includes(e.key) ||
+                (e.altKey && ["ArrowUp", "ArrowDown"].includes(e.key)) ||
+                (isOpen && e.key === "Tab")
+              ) {
+                e.preventDefault();
+                toggleIsOpen();
+              } else if (e.key === "Escape" && isOpen) {
+                toggleIsOpen();
+              }
+            }}
           >
             {options.map(({ value, displayText }) => (
               <option key={value} value={value}>
@@ -151,7 +158,12 @@ export function Option({
   className,
   children,
 }: OptionProps) {
-  const { setOptions, setValue, toggleIsOpen } = useDropdown();
+  const {
+    setOptions,
+    setValue,
+    toggleIsOpen,
+    value: selectedValue,
+  } = useDropdown();
   const stringContent = Children.toArray(children)
     .filter((child) => typeof child === "string")
     .join("");
@@ -159,14 +171,12 @@ export function Option({
   const actualValue = value ?? displayText ?? stringContent;
 
   useEffect(() => {
-    console.log("hi");
     setOptions((options) => [
       ...options,
       { value: actualValue, displayText: displayText ?? stringContent },
     ]);
 
     return () => {
-      console.log("bye");
       setOptions((options) =>
         options.filter((opt) => opt.value !== actualValue)
       );
@@ -174,18 +184,21 @@ export function Option({
   }, [setOptions, displayText, stringContent, actualValue]);
 
   return (
-    <button
+    <li
       data-dropdown-option
-      type="button"
-      tabIndex={-1}
+      data-selected={selectedValue === actualValue}
       className={className}
-      onClick={() => {
-        setValue(actualValue);
-        toggleIsOpen();
-      }}
-      data-value={value ?? displayText ?? stringContent}
     >
-      {children}
-    </button>
+      <button
+        type="button"
+        tabIndex={-1}
+        onClick={() => {
+          setValue(actualValue);
+          toggleIsOpen();
+        }}
+      >
+        {children}
+      </button>
+    </li>
   );
 }

@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 import * as uuid from "uuid";
-import { desktopMediaQuery, tabletMediaQuery } from "~/utils/media-queries";
+import { tabletMediaQuery } from "~/utils/media-queries";
 import {
   isValidProposalLength,
   isValidProposalType,
@@ -13,8 +13,8 @@ import {
 import { submitProposal } from "~/utils/proposals.server";
 import stylesUrl from "~/styles/proposals.new.css";
 import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
-import desktopStylesUrl from "~/styles/proposals.new.desktop.css";
 import { Dropdown, Option } from "~/components/Dropdown";
+import { useIsDesktopMode } from "~/utils/hooks";
 
 const listFormatter = new Intl.ListFormat("en", { type: "disjunction" });
 const quote = (str: string) => `"${str}"`;
@@ -81,11 +81,13 @@ export const action = async ({ request }: ActionArgs) => {
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesUrl },
   { rel: "stylesheet", href: tabletStylesUrl, media: tabletMediaQuery },
-  { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery },
 ];
 
 export default function New() {
   const actionData = useActionData<typeof action>();
+  const isDesktopMode = useIsDesktopMode();
+
+  const clearDropdownText = isDesktopMode ? "" : "Clear";
 
   return (
     <>
@@ -103,10 +105,20 @@ export default function New() {
           defaultValue={actionData?.fields?.title}
         />
         <label htmlFor="type-select">Type</label>
-        <Dropdown name="type" id="type-select" defaultValue={actionData?.fields?.type}>
-          {proposalTypes.map((value, i) => (
-            !value ? <Option key={i} displayText="">Clear</Option> : <Option key={i}>{value}</Option>
-          ))}
+        <Dropdown
+          name="type"
+          id="type-select"
+          defaultValue={actionData?.fields?.type}
+        >
+          {proposalTypes.map((value, i) =>
+            !value ? (
+              <Option key={i} displayText="" className="clear-dropdown-selection">
+                {clearDropdownText}
+              </Option>
+            ) : (
+              <Option key={i}>{value}</Option>
+            )
+          )}
         </Dropdown>
         <label htmlFor="length-select">Length</label>
         <Dropdown
@@ -114,9 +126,15 @@ export default function New() {
           name="length"
           defaultValue={actionData?.fields?.length}
         >
-          {proposalLengths.map((value, i) => (
-            !value ? <Option key={i} displayText="">Clear</Option> : <Option key={i}>{value}</Option>
-          ))}
+          {proposalLengths.map((value, i) =>
+            !value ? (
+              <Option key={i} displayText="" className="clear-dropdown-selection">
+                {clearDropdownText}
+              </Option>
+            ) : (
+              <Option key={i}>{value}</Option>
+            )
+          )}
         </Dropdown>
         <label htmlFor="description-input">Description</label>
         <textarea

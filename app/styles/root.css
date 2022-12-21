@@ -5,6 +5,7 @@
 
     --gray-10: #faf9f8;
     --gray-20: #f3f2f1;
+    --gray-30: #edebe9;
     --gray-130: #605e5c;
     
     --red: #d13438;
@@ -203,6 +204,7 @@ h1 {
     transform: translateY(100%);
     transform-origin: top;
     transition: transform 100ms ease-in;
+    list-style: none;
 }
 
 [data-dropdown-options][data-is-open="true"] {
@@ -211,11 +213,19 @@ h1 {
 }
 
 [data-dropdown-options] [data-dropdown-option] {
+    min-height: 2.0833333rem;
+    cursor: pointer;
+}
+
+[data-dropdown-options] [data-dropdown-option] button {
     border: 0;
     background: transparent;
     width: 100%;
-    min-height: 2.0833333rem;
-    cursor: pointer;
+    color: inherit;
+}
+
+[data-dropdown-options] [data-dropdown-option][data-selected="true"] {
+    background: var(--gray-30);
 }
 
 @media (hover: hover) and (pointer: fine) {
