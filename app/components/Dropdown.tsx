@@ -37,7 +37,13 @@ type DropdownProps = PropsWithChildren & {
   defaultValue?: string | number;
   "aria-label"?: string;
 };
-export function Dropdown({ name, id, defaultValue, "aria-label": ariaLabel, children }: DropdownProps) {
+export function Dropdown({
+  name,
+  id,
+  defaultValue,
+  "aria-label": ariaLabel,
+  children,
+}: DropdownProps) {
   const [options, setOptions] = useState<OptionDef[]>([]);
   const [value, setValue] = useState<string | number>(defaultValue ?? "");
   const [isOpen, toggleIsOpen] = useToggle();
@@ -154,14 +160,34 @@ export function Dropdown({ name, id, defaultValue, "aria-label": ariaLabel, chil
   );
 }
 
-export function useDropdown() {
+export function useDropdown(value: string | number, displayText: string) {
   const ctx = useContext(context);
+  const id = useId();
 
   if (!ctx) {
     throw new Error("useDropdown must be used inside a dropdown");
   }
 
-  return ctx;
+  const { setOptions, value: selectedValue, setValue, toggleIsOpen } = ctx;
+
+  useEffect(() => {
+    const option = { id, value, displayText };
+
+    setOptions((options) => [...options, option]);
+
+    return () => {
+      setOptions((options) => options.filter((opt) => opt === option));
+    };
+  }, [setOptions, value, displayText, id]);
+
+  return {
+    id,
+    isSelected: selectedValue === value,
+    select() {
+      setValue(value);
+      toggleIsOpen();
+    },
+  };
 }
 
 type OptionProps = PropsWithChildren & {
@@ -175,48 +201,29 @@ export function Option({
   className,
   children,
 }: OptionProps) {
-  const {
-    setOptions,
-    setValue,
-    toggleIsOpen,
-    value: selectedValue,
-  } = useDropdown();
-  const id = useId();
-
   const stringContent = Children.toArray(children)
     .filter((child) => typeof child === "string")
     .join("");
 
   const actualValue = value ?? displayText ?? stringContent;
 
-  useEffect(() => {
-    setOptions((options) => [
-      ...options,
-      { id, value: actualValue, displayText: displayText ?? stringContent },
-    ]);
-
-    return () => {
-      setOptions((options) =>
-        options.filter((opt) => opt.value !== actualValue)
-      );
-    };
-  }, [setOptions, displayText, stringContent, actualValue, id]);
+  const { id, isSelected, select } = useDropdown(
+    actualValue,
+    displayText ?? stringContent
+  );
 
   return (
     <li
       data-dropdown-option
       role="option"
-      aria-selected={selectedValue === actualValue}
+      aria-selected={isSelected}
       className={className}
       id={id}
     >
       <button
         type="button"
         tabIndex={-1}
-        onClick={() => {
-          setValue(actualValue);
-          toggleIsOpen();
-        }}
+        onClick={select}
       >
         {children}
       </button>
