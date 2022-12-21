@@ -5,6 +5,7 @@ import type {
   ReactNode,
   SetStateAction,
 } from "react";
+import { useId } from "react";
 import {
   createContext,
   useContext,
@@ -17,7 +18,7 @@ import { createPortal } from "react-dom";
 import { useIsDesktopMode, useToggle } from "~/utils/hooks";
 import Icon from "./Icon";
 
-type OptionDef = { value: string | number; displayText: string };
+type OptionDef = { id: string; value: string | number; displayText: string };
 type DropdownContext = {
   options: OptionDef[];
   setOptions: Dispatch<SetStateAction<OptionDef[]>>;
@@ -34,8 +35,9 @@ type DropdownProps = PropsWithChildren & {
   name?: string;
   id?: string;
   defaultValue?: string | number;
+  "aria-label"?: string;
 };
-export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
+export function Dropdown({ name, id, defaultValue, "aria-label": ariaLabel, children }: DropdownProps) {
   const [options, setOptions] = useState<OptionDef[]>([]);
   const [value, setValue] = useState<string | number>(defaultValue ?? "");
   const [isOpen, toggleIsOpen] = useToggle();
@@ -43,11 +45,17 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
   const isDesktopMode = useIsDesktopMode();
   const selectRef = useRef<HTMLSelectElement>(null);
   const listboxRef = useRef<HTMLUListElement>(null);
+  const listboxId = useId();
 
   useEffect(() => {
     if (isDesktopMode || !dialogsPortal) {
       setListbox(
-        <ul data-dropdown-options ref={listboxRef}>
+        <ul
+          data-dropdown-options
+          role="listbox"
+          id={listboxId}
+          ref={listboxRef}
+        >
           {children}
         </ul>
       );
@@ -60,7 +68,13 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
               data-is-open={isOpen}
               onClick={toggleIsOpen}
             ></div>
-            <ul data-dropdown-options data-is-open={isOpen} tabIndex={0}>
+            <ul
+              data-dropdown-options
+              data-is-open={isOpen}
+              role="dialog"
+              id={listboxId}
+              tabIndex={0}
+            >
               {children}
             </ul>
           </>,
@@ -68,14 +82,25 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
         )
       );
     }
-  }, [isDesktopMode, children, isOpen, toggleIsOpen]);
+  }, [isDesktopMode, children, isOpen, toggleIsOpen, listboxId]);
 
   return (
     <>
       <div data-dropdown>
-        <div
-          data-dropdown-title
-          aria-expanded={isOpen}
+        <select
+          role="combobox"
+          aria-expanded={isOpen ? "true" : undefined}
+          aria-controls={isOpen ? listboxId : undefined}
+          aria-haspopup={isDesktopMode ? undefined : "dialog"}
+          aria-activedescendant={
+            isOpen ? options.find((opt) => opt.value === value)?.id : undefined
+          }
+          aria-label={ariaLabel}
+          name={name}
+          id={id}
+          value={value}
+          ref={selectRef}
+          onChange={(e) => setValue(e.target.value)}
           onMouseDown={(e) => {
             if (!dialogsPortal && !isDesktopMode) {
               return;
@@ -88,45 +113,37 @@ export function Dropdown({ name, id, defaultValue, children }: DropdownProps) {
               selectRef.current?.focus();
             }
           }}
-        >
-          <select
-            name={name}
-            id={id}
-            value={value}
-            ref={selectRef}
-            onChange={(e) => setValue(e.target.value)}
-            onBlur={(e) => {
-              if (
-                !isDesktopMode ||
-                !isOpen ||
-                listboxRef.current?.contains(e.relatedTarget)
-              ) {
-                return;
-              }
+          onBlur={(e) => {
+            if (
+              !isDesktopMode ||
+              !isOpen ||
+              listboxRef.current?.contains(e.relatedTarget)
+            ) {
+              return;
+            }
 
+            toggleIsOpen();
+          }}
+          onKeyDown={(e) => {
+            if (
+              [" ", "Enter"].includes(e.key) ||
+              (e.altKey && ["ArrowUp", "ArrowDown"].includes(e.key)) ||
+              (isOpen && e.key === "Tab")
+            ) {
+              e.preventDefault();
               toggleIsOpen();
-            }}
-            onKeyDown={(e) => {
-              if (
-                [" ", "Enter"].includes(e.key) ||
-                (e.altKey && ["ArrowUp", "ArrowDown"].includes(e.key)) ||
-                (isOpen && e.key === "Tab")
-              ) {
-                e.preventDefault();
-                toggleIsOpen();
-              } else if (e.key === "Escape" && isOpen) {
-                toggleIsOpen();
-              }
-            }}
-          >
-            {options.map(({ value, displayText }) => (
-              <option key={value} value={value}>
-                {displayText}
-              </option>
-            ))}
-          </select>
-          <Icon iconName="ChevronDown" />
-        </div>
+            } else if (e.key === "Escape" && isOpen) {
+              toggleIsOpen();
+            }
+          }}
+        >
+          {options.map(({ value, displayText }) => (
+            <option key={value} value={value}>
+              {displayText}
+            </option>
+          ))}
+        </select>
+        <Icon iconName="ChevronDown" />
         <context.Provider
           value={{ options, setOptions, value, setValue, toggleIsOpen }}
         >
@@ -164,6 +181,8 @@ export function Option({
     toggleIsOpen,
     value: selectedValue,
   } = useDropdown();
+  const id = useId();
+
   const stringContent = Children.toArray(children)
     .filter((child) => typeof child === "string")
     .join("");
@@ -173,7 +192,7 @@ export function Option({
   useEffect(() => {
     setOptions((options) => [
       ...options,
-      { value: actualValue, displayText: displayText ?? stringContent },
+      { id, value: actualValue, displayText: displayText ?? stringContent },
     ]);
 
     return () => {
@@ -181,13 +200,15 @@ export function Option({
         options.filter((opt) => opt.value !== actualValue)
       );
     };
-  }, [setOptions, displayText, stringContent, actualValue]);
+  }, [setOptions, displayText, stringContent, actualValue, id]);
 
   return (
     <li
       data-dropdown-option
-      data-selected={selectedValue === actualValue}
+      role="option"
+      aria-selected={selectedValue === actualValue}
       className={className}
+      id={id}
     >
       <button
         type="button"

@@ -13,10 +13,6 @@ main {
 }
 
 /******************** Dropdown ********************/
-[data-dropdown] {
-    position: relative;
-}
-
 [data-dropdown] [data-dropdown-options] {
     position: absolute;
     top: 100%;
@@ -30,6 +26,6 @@ main {
     box-shadow: var(--depth-8);
 }
 
-[data-dropdown] [data-dropdown-title][aria-expanded="true"] + [data-dropdown-options] {
+[data-dropdown] select[aria-expanded="true"] + [data-icon] + [data-dropdown-options] {
     transform: none;
 }
