@@ -7,7 +7,7 @@
     --gray-20: #f3f2f1;
     --gray-30: #edebe9;
     --gray-130: #605e5c;
-    
+
     --red: #d13438;
     --magenta-20: #881798;
 
@@ -17,7 +17,9 @@
     --depth-64: 0 25.6px 57.6px 0 rgba(0, 0, 0, 0.22), 0 4.8px 14.4px 0 rgba(0, 0, 0, 0.18);
 }
 
-*, *::after, *::before {
+*,
+*::after,
+*::before {
     box-sizing: border-box;
 }
 
@@ -31,7 +33,8 @@ img {
     padding: 0;
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -46,7 +49,10 @@ body {
     flex-direction: column;
 }
 
-input, select, textarea, button {
+input,
+select,
+textarea,
+button {
     font-size: inherit;
     font-family: inherit;
     display: block;
@@ -54,7 +60,9 @@ input, select, textarea, button {
     appearance: none;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
     border: 1px solid black;
     border-radius: 2px;
     outline-color: var(--primary-color);
@@ -64,7 +72,8 @@ a {
     color: inherit;
 }
 
-ul, ol {
+ul,
+ol {
     list-style-position: inside;
 }
 
@@ -76,6 +85,18 @@ main {
 
 h1 {
     font-size: 1.3rem;
+}
+
+[data-visually-hidden] {
+    visibility: inherit;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    height: 1;
+    width: 1;
+    margin: -1;
+    padding: 0;
+    border: 0;
 }
 
 /******************** App Header ********************/
@@ -214,13 +235,8 @@ h1 {
 [data-dropdown-options] [data-dropdown-option] {
     min-height: 2.0833333rem;
     cursor: pointer;
-}
-
-[data-dropdown-options] [data-dropdown-option] button {
-    border: 0;
-    background: transparent;
-    width: 100%;
-    color: inherit;
+    text-align: center;
+    padding: 9px 8px
 }
 
 [data-dropdown-options] [data-dropdown-option][aria-selected="true"] {

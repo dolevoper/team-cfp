@@ -20,7 +20,3 @@ label[for="title-input"]::after {
     content: " *";
     color: var(--red);
 }
-
-.clear-dropdown-selection {
-    color: var(--red);
-}

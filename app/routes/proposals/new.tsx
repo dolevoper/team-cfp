@@ -87,8 +87,6 @@ export default function New() {
   const actionData = useActionData<typeof action>();
   const isDesktopMode = useIsDesktopMode();
 
-  const clearDropdownText = isDesktopMode ? "" : "Clear";
-
   return (
     <>
       <header data-page-header>
@@ -112,8 +110,8 @@ export default function New() {
         >
           {proposalTypes.map((value, i) =>
             !value ? (
-              <Option key={i} displayText="" className="clear-dropdown-selection">
-                {clearDropdownText}
+              <Option key={i} displayText="">
+                <span data-visually-hidden={isDesktopMode ? true : undefined} style={{ color: "var(--red)" }}>Clear</span>
               </Option>
             ) : (
               <Option key={i}>{value}</Option>
@@ -128,8 +126,8 @@ export default function New() {
         >
           {proposalLengths.map((value, i) =>
             !value ? (
-              <Option key={i} displayText="" className="clear-dropdown-selection">
-                {clearDropdownText}
+              <Option key={i} displayText="">
+                <span data-visually-hidden={isDesktopMode ? true : undefined} style={{ color: "var(--red)" }}>Clear</span>
               </Option>
             ) : (
               <Option key={i}>{value}</Option>

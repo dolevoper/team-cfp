@@ -59,6 +59,7 @@ export function Dropdown({
         <ul
           data-dropdown-options
           role="listbox"
+          aria-label="Dropdown list"
           id={listboxId}
           ref={listboxRef}
         >
@@ -68,7 +69,7 @@ export function Dropdown({
     } else {
       setListbox(
         createPortal(
-          <>
+          <div role="dialog" id={listboxId}>
             <div
               data-dropdown-backdrop
               data-is-open={isOpen}
@@ -77,13 +78,13 @@ export function Dropdown({
             <ul
               data-dropdown-options
               data-is-open={isOpen}
-              role="dialog"
-              id={listboxId}
+              role="listbox"
               tabIndex={0}
+              aria-label="Dropdown list"
             >
               {children}
             </ul>
-          </>,
+          </div>,
           dialogsPortal
         )
       );
@@ -95,12 +96,13 @@ export function Dropdown({
       <div data-dropdown>
         <select
           role="combobox"
-          aria-expanded={isOpen ? "true" : undefined}
+          aria-expanded={isOpen}
           aria-controls={isOpen ? listboxId : undefined}
           aria-haspopup={isDesktopMode ? undefined : "dialog"}
           aria-activedescendant={
             isOpen ? options.find((opt) => opt.value === value)?.id : undefined
           }
+          aria-autocomplete="list"
           aria-label={ariaLabel}
           name={name}
           id={id}
@@ -219,14 +221,9 @@ export function Option({
       aria-selected={isSelected}
       className={className}
       id={id}
+      onClick={select}
     >
-      <button
-        type="button"
-        tabIndex={-1}
-        onClick={select}
-      >
-        {children}
-      </button>
+      {children}
     </li>
   );
 }
