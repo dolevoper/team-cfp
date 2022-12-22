@@ -18,7 +18,7 @@ import { createPortal } from "react-dom";
 import { useIsDesktopMode, useToggle } from "~/utils/hooks";
 import Icon from "./Icon";
 
-type OptionDef = { id: string; value: string | number; displayText: string };
+type OptionDef = { id: string; value: string | number; element: ReactNode };
 type DropdownContext = {
   options: OptionDef[];
   setOptions: Dispatch<SetStateAction<OptionDef[]>>;
@@ -48,13 +48,46 @@ export function Dropdown({
   const [value, setValue] = useState<string | number>(defaultValue ?? "");
   const [isOpen, toggleIsOpen] = useToggle();
   const [listbox, setListbox] = useState<ReactNode>();
+  const [ariaHaspopup, setAriaHaspopup] = useState<"dialog">();
   const isDesktopMode = useIsDesktopMode();
   const selectRef = useRef<HTMLSelectElement>(null);
   const listboxRef = useRef<HTMLUListElement>(null);
   const listboxId = useId();
 
   useEffect(() => {
+    const opts = [...(selectRef.current?.options ?? [])].map((option) => {
+      const optionDef = options.find(
+        ({ id }) => id === option.getAttribute("data-dropdown-option-id")
+      );
+
+      if (!optionDef) {
+        return null;
+      }
+
+      return (
+        <li
+          data-dropdown-option
+          role="option"
+          aria-selected={
+            selectRef.current?.selectedOptions[0].getAttribute(
+              "data-dropdown-option-id"
+            ) === optionDef.id
+          }
+          key={optionDef.id}
+          id={optionDef.id}
+          onClick={() => {
+            setValue(optionDef.value);
+            toggleIsOpen();
+          }}
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          {optionDef.element}
+        </li>
+      );
+    });
+
     if (isDesktopMode || !dialogsPortal) {
+      setAriaHaspopup(undefined);
       setListbox(
         <ul
           data-dropdown-options
@@ -63,10 +96,11 @@ export function Dropdown({
           id={listboxId}
           ref={listboxRef}
         >
-          {children}
+          {opts}
         </ul>
       );
     } else {
+      setAriaHaspopup("dialog");
       setListbox(
         createPortal(
           <div role="dialog" id={listboxId}>
@@ -82,14 +116,14 @@ export function Dropdown({
               tabIndex={0}
               aria-label="Dropdown list"
             >
-              {children}
+              {opts}
             </ul>
           </div>,
           dialogsPortal
         )
       );
     }
-  }, [isDesktopMode, children, isOpen, toggleIsOpen, listboxId]);
+  }, [isDesktopMode, isOpen, toggleIsOpen, listboxId, options]);
 
   return (
     <>
@@ -98,9 +132,13 @@ export function Dropdown({
           role="combobox"
           aria-expanded={isOpen}
           aria-controls={isOpen ? listboxId : undefined}
-          aria-haspopup={isDesktopMode ? undefined : "dialog"}
+          aria-haspopup={ariaHaspopup}
           aria-activedescendant={
-            isOpen ? options.find((opt) => opt.value === value)?.id : undefined
+            isOpen
+              ? selectRef.current?.selectedOptions[0].getAttribute(
+                  "data-dropdown-option-id"
+                ) ?? undefined
+              : undefined
           }
           aria-autocomplete="list"
           aria-label={ariaLabel}
@@ -145,51 +183,27 @@ export function Dropdown({
             }
           }}
         >
-          {options.map(({ value, displayText }) => (
-            <option key={value} value={value}>
-              {displayText}
-            </option>
-          ))}
+          <context.Provider
+            value={{ options, setOptions, value, setValue, toggleIsOpen }}
+          >
+            {children}
+          </context.Provider>
         </select>
         <Icon iconName="ChevronDown" />
-        <context.Provider
-          value={{ options, setOptions, value, setValue, toggleIsOpen }}
-        >
-          {listbox}
-        </context.Provider>
+        {listbox}
       </div>
     </>
   );
 }
 
-export function useDropdown(value: string | number, displayText: string) {
+export function useDropdown() {
   const ctx = useContext(context);
-  const id = useId();
 
   if (!ctx) {
     throw new Error("useDropdown must be used inside a dropdown");
   }
 
-  const { setOptions, value: selectedValue, setValue, toggleIsOpen } = ctx;
-
-  useEffect(() => {
-    const option = { id, value, displayText };
-
-    setOptions((options) => [...options, option]);
-
-    return () => {
-      setOptions((options) => options.filter((opt) => opt === option));
-    };
-  }, [setOptions, value, displayText, id]);
-
-  return {
-    id,
-    isSelected: selectedValue === value,
-    select() {
-      setValue(value);
-      toggleIsOpen();
-    },
-  };
+  return ctx;
 }
 
 type OptionProps = PropsWithChildren & {
@@ -197,33 +211,30 @@ type OptionProps = PropsWithChildren & {
   displayText?: string;
   className?: string;
 };
-export function Option({
-  value,
-  displayText,
-  className,
-  children,
-}: OptionProps) {
+export function Option({ value, displayText, children }: OptionProps) {
   const stringContent = Children.toArray(children)
     .filter((child) => typeof child === "string")
     .join("");
 
-  const actualValue = value ?? displayText ?? stringContent;
+  const actualDisplayText = displayText ?? stringContent;
+  const actualValue = value ?? actualDisplayText;
 
-  const { id, isSelected, select } = useDropdown(
-    actualValue,
-    displayText ?? stringContent
-  );
+  const { setOptions } = useDropdown();
+  const id = useId();
+
+  useEffect(() => {
+    const option: OptionDef = { id, value: actualValue, element: children };
+
+    setOptions((options) => [...options, option]);
+
+    return () => {
+      setOptions((options) => options.filter((opt) => opt !== option));
+    };
+  }, [id, actualValue, children, setOptions]);
 
   return (
-    <li
-      data-dropdown-option
-      role="option"
-      aria-selected={isSelected}
-      className={className}
-      id={id}
-      onClick={select}
-    >
-      {children}
-    </li>
+    <option data-dropdown-option-id={id} value={actualValue}>
+      {actualDisplayText}
+    </option>
   );
 }
