@@ -2,6 +2,13 @@ section {
     margin-bottom: 64px;
 }
 
+dl {
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: 8px 32px;
+    margin: 64px 0;
+}
+
 #description {
-    white-space: pre;
+    white-space: pre-wrap;
 }

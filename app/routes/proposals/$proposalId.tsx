@@ -32,20 +32,39 @@ export default function ViewProposal() {
         <h1>{proposal.title}</h1>
         <Link to="/">Back</Link>
       </header>
-      <section>
-        {proposedBy && <div>Proposed by: <Persona userData={proposedBy} /></div>}
-        <div>
-          Created:{" "}
+      <dl>
+        <dt>Created</dt>
+        <dd>
           <time dateTime={proposal.createdAt}>
             {new Intl.DateTimeFormat("en-US").format(
               new Date(proposal.createdAt)
             )}
           </time>
-        </div>
-        {proposal.type && <div>Type: {proposal.type}</div>}
-        {proposal.length && <div>Length: {proposal.length}</div>}
-      </section>
-      {proposal.description && <section id="description">{proposal.description}</section>}
+        </dd>
+        {proposedBy && (
+          <>
+            <dt>Proposed by</dt>
+            <dd>
+              <Persona userData={proposedBy} />
+            </dd>
+          </>
+        )}
+        {proposal.type && (
+          <>
+            <dt>Type</dt>
+            <dd>{proposal.type}</dd>
+          </>
+        )}
+        {proposal.length && (
+          <>
+            <dt>Length</dt>
+            <dd>{proposal.length}</dd>
+          </>
+        )}
+      </dl>
+      {proposal.description && (
+        <section id="description">{proposal.description}</section>
+      )}
     </>
   );
 }
