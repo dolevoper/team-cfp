@@ -79,7 +79,7 @@ export function Dropdown({
             setValue(optionDef.value);
             toggleIsOpen();
           }}
-          onMouseDown={(e) => e.preventDefault()}
+          tabIndex={isOpen ? 0 : undefined}
         >
           {optionDef.element}
         </li>

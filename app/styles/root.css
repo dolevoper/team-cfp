@@ -69,7 +69,15 @@ select {
 }
 
 a {
-    color: inherit;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    a:hover {
+        text-decoration: revert;
+    }
 }
 
 ul,
@@ -87,14 +95,18 @@ h1 {
     font-size: 1.3rem;
 }
 
+h2, h3, h4, h5, h6 {
+    font-size: inherit;
+}
+
 [data-visually-hidden] {
     visibility: inherit;
     position: absolute;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
-    height: 1;
-    width: 1;
-    margin: -1;
+    height: 1px;
+    width: 1px;
+    margin: -1px;
     padding: 0;
     border: 0;
 }
@@ -108,45 +120,11 @@ h1 {
     align-items: baseline;
 }
 
-#app-header a {
+#app-header [data-app-name] {
     padding: 8px 16px;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.8rem;
-}
-
-#app-header [data-username] {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 2rem;
-    height: 2rem;
-    cursor: pointer;
-    border: 0;
-    background: transparent;
-    color: inherit;
-}
-
-@media (hover: hover) and (pointer: fine) {
-    #app-header [data-username]:hover {
-        background: var(--primary-color-dark-alt);
-    }
-}
-
-#app-header [data-username]:active {
-    background: var(--primary-color-darker);
-}
-
-#app-header [data-username] span {
-    --container-size: 1.2rem;
-    background: var(--magenta-20);
-    border-radius: 50%;
-    font-size: 0.6rem;
-    width: var(--container-size);
-    height: var(--container-size);
-    line-height: var(--container-size);
-    text-align: center;
-    font-weight: 600;
 }
 
 /******************** Page Header ********************/
@@ -169,8 +147,14 @@ h1 {
     cursor: pointer;
 }
 
-[data-button-primary]:hover {
-    background: var(--primary-color-dark-alt);
+@media (hover: hover) and (pointer: fine) {
+    [data-button-primary]:hover {
+        background: var(--primary-color-dark-alt);
+    }
+
+    a[data-button-primary]:hover {
+        text-decoration: none;
+    }
 }
 
 [data-button-primary]:active {
@@ -246,5 +230,76 @@ h1 {
 @media (hover: hover) and (pointer: fine) {
     [data-dropdown-options] [data-dropdown-option]:hover {
         background: var(--gray-20);
+    }
+}
+
+/******************** User Panel ********************/
+[data-user-menu] {
+    position: relative;
+}
+
+[data-user-menu] button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+
+[data-user-menu] button:active {
+    background: var(--primary-color-darker);
+}
+
+[data-user-menu] [data-persona] {
+    --container-size: 1.2rem;
+    background: var(--magenta-20);
+    border-radius: 50%;
+    font-size: 0.6rem;
+    width: var(--container-size);
+    height: var(--container-size);
+    line-height: var(--container-size);
+    text-align: center;
+    font-weight: 600;
+}
+
+[data-user-menu] menu {
+    transform: scaleY(0);
+    transform-origin: top;
+    will-change: transform;
+    transition: transform 100ms;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100vw;
+    box-shadow: var(--depth-8);
+    background: white;
+    color: black;
+    list-style: none;
+    padding: 16px;
+}
+
+[data-user-menu] button[aria-expanded="true"] + menu {
+    transform: none;
+}
+
+[data-user-menu] menu hgroup {
+    text-align: center;
+}
+
+[data-user-menu] menu hgroup p::before {
+    content: "(";
+}
+
+[data-user-menu] menu hgroup p::after {
+    content: ")";
+}
+
+@media (hover: hover) and (pointer: fine) {
+    [data-user-menu] button:hover {
+        background: var(--primary-color-dark-alt);
     }
 }

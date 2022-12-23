@@ -29,3 +29,8 @@ main {
 [data-dropdown] select[aria-expanded="true"] + [data-icon] + [data-dropdown-options] {
     transform: none;
 }
+
+/******************** User Panel ********************/
+[data-user-menu] menu {
+    width: auto;
+}

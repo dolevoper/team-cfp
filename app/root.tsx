@@ -14,19 +14,13 @@ import stylesUrl from "~/styles/root.css";
 import desktopStylesUrl from "~/styles/root.desktop.css";
 import iconsStylesUrl from "~/styles/fabric-icons.css";
 import { desktopMediaQuery } from "~/utils/media-queries";
+import { getUserToken } from "./utils/session.server";
+import { UserMenu } from "./components/UserMenu";
 
 export const loader = ({ request }: LoaderArgs) => {
-  const idToken = request.headers.get("x-ms-token-aad-id-token") ?? process.env.ID_TOKEN;
+  const user = getUserToken(request);
 
-  if (!idToken) {
-    throw new Response("Unauthorized", { status: 401 });
-  }
-
-  const [, encodedTokenString] = idToken.split(".");
-  const token = JSON.parse(Buffer.from(encodedTokenString, "base64").toString()) as Record<string, string>;
-  const { name, preferred_username } = token;
-
-  return json({ user: { name, preferredUsername: preferred_username } });
+  return json({ user });
 };
 
 export const meta: MetaFunction = () => ({
@@ -52,10 +46,8 @@ export default function App() {
       </head>
       <body>
         <header id="app-header">
-          <Link to="/">Team-CFP</Link>
-          <button data-username title={`${data.user.name} (${data.user.preferredUsername})`}>
-            <span>{data.user.name.split(" ").slice(0, 2).map((part) => part.charAt(0).toUpperCase()).join("")}</span>
-          </button>
+          <Link data-app-name to="/">Team-CFP</Link>
+          <UserMenu user={data.user} />
         </header>
         <main>
           <Outlet />
