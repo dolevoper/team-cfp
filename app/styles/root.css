@@ -254,18 +254,6 @@ h2, h3, h4, h5, h6 {
     background: var(--primary-color-darker);
 }
 
-[data-user-menu] [data-persona] {
-    --container-size: 1.2rem;
-    background: var(--magenta-20);
-    border-radius: 50%;
-    font-size: 0.6rem;
-    width: var(--container-size);
-    height: var(--container-size);
-    line-height: var(--container-size);
-    text-align: center;
-    font-weight: 600;
-}
-
 [data-user-menu] menu {
     transform: scaleY(0);
     transform-origin: top;
@@ -302,4 +290,25 @@ h2, h3, h4, h5, h6 {
     [data-user-menu] button:hover {
         background: var(--primary-color-dark-alt);
     }
+}
+
+/******************** Persona ********************/
+[data-persona] {
+    --size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+[data-persona]::before {
+    content: attr(data-initials);
+    background-color: var(--magenta-20);
+    color: white;
+    border-radius: 50%;
+    font-size: calc(var(--size) / 2);
+    width: var(--size);
+    height: var(--size);
+    line-height: var(--size);
+    text-align: center;
+    font-weight: 600;
 }

@@ -4,6 +4,8 @@ import { json } from "@remix-run/node";
 import { Link, useCatch, useLoaderData } from "@remix-run/react";
 import { getProposalById } from "~/utils/proposals.server";
 import stylesUrl from "~/styles/proposals.details.css";
+import { users } from "~/utils/users.server";
+import { Persona } from "~/components/Persona";
 
 export async function loader({ params: { proposalId } }: LoaderArgs) {
   const proposal = await getProposalById(proposalId!);
@@ -12,7 +14,9 @@ export async function loader({ params: { proposalId } }: LoaderArgs) {
     throw new Response(`Proposal "${proposalId}" not found.`, { status: 404 });
   }
 
-  return json({ proposal });
+  const proposedBy = users.get(proposal.proposedByPrincipalId);
+
+  return json({ proposal, proposedBy });
 }
 
 export const links: LinksFunction = () => [
@@ -20,7 +24,7 @@ export const links: LinksFunction = () => [
 ];
 
 export default function ViewProposal() {
-  const { proposal } = useLoaderData<typeof loader>();
+  const { proposal, proposedBy } = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -29,6 +33,7 @@ export default function ViewProposal() {
         <Link to="/">Back</Link>
       </header>
       <section>
+        {proposedBy && <div>Proposed by: <Persona userData={proposedBy} /></div>}
         <div>
           Created:{" "}
           <time dateTime={proposal.createdAt}>

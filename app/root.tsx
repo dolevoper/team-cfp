@@ -14,11 +14,14 @@ import stylesUrl from "~/styles/root.css";
 import desktopStylesUrl from "~/styles/root.desktop.css";
 import iconsStylesUrl from "~/styles/fabric-icons.css";
 import { desktopMediaQuery } from "~/utils/media-queries";
-import { getUserToken } from "./utils/session.server";
-import { UserMenu } from "./components/UserMenu";
+import { getUserData } from "~/utils/session.server";
+import { UserMenu } from "~/components/UserMenu";
+import { users } from "~/utils/users.server";
 
 export const loader = ({ request }: LoaderArgs) => {
-  const user = getUserToken(request);
+  const user = getUserData(request);
+
+  users.set(user.principalId, user);
 
   return json({ user });
 };

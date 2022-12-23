@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { useId, useRef } from "react";
 import { useToggle } from "~/utils/hooks";
 import type { UserData } from "~/utils/session.server";
+import { Persona } from "./Persona";
 
 type UserMenuProps = { user: UserData };
 export function UserMenu({ user }: UserMenuProps) {
@@ -28,13 +29,7 @@ export function UserMenu({ user }: UserMenuProps) {
         }}
       >
         <span data-visually-hidden>User menu</span>
-        <span data-persona>
-          {user.name
-            .split(" ")
-            .slice(0, 2)
-            .map((part) => part.charAt(0).toUpperCase())
-            .join("")}
-        </span>
+        <Persona userData={user} size="1.2rem" initialsOnly />
       </button>
       <menu
         aria-labelledby={buttonId}

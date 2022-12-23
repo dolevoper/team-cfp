@@ -13,6 +13,7 @@ export const isValidProposalLength = validateEnum(proposalLengths);
 export interface Proposal {
     id: string;
     title: string;
+    proposedByPrincipalId: string;
     type: typeof proposalTypes[number];
     length: typeof proposalLengths[number];
     description: string;

@@ -15,6 +15,7 @@ import stylesUrl from "~/styles/proposals.new.css";
 import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
 import { Dropdown, Option } from "~/components/Dropdown";
 import { useIsDesktopMode } from "~/utils/hooks";
+import { getUserData } from "~/utils/session.server";
 
 const listFormatter = new Intl.ListFormat("en", { type: "disjunction" });
 const quote = (str: string) => `"${str}"`;
@@ -67,9 +68,12 @@ export const action = async ({ request }: ActionArgs) => {
     );
   }
 
+  const userData = getUserData(request);
+
   await submitProposal({
     id: uuid.v4(),
     title,
+    proposedByPrincipalId: userData.principalId,
     type,
     length,
     description,
