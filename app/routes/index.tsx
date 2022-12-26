@@ -18,6 +18,8 @@ export const links: LinksFunction = () => [
 export default function Index() {
   const { proposals } = useLoaderData<typeof loader>();
   const [expanded, setExpanded] = useState<string>();
+  const [expanding, setExpanding] = useState<string>();
+  const [collapsing, setCollapsing] = useState<string>();
 
   return (
     <>
@@ -27,16 +29,45 @@ export default function Index() {
       <table data-grid>
         <caption>Proposals</caption>
         {proposals.map((proposal) => (
-          <tbody key={proposal.id} data-expanded={expanded === proposal.id}>
+          <tbody
+            key={proposal.id}
+            data-expanded={expanded === proposal.id}
+            data-transition={expanding === proposal.id ? "enter" : collapsing === proposal.id ? "leave" : undefined}
+          >
             <tr
-              onClick={() =>
-                expanded === proposal.id
-                  ? setExpanded(undefined)
-                  : setExpanded(proposal.id)
-              }
+              onClick={() => {
+                function expand() {
+                  setExpanded(proposal.id);
+                  setExpanding(proposal.id);
+
+                  setTimeout(() => setExpanding(undefined), 100);
+                }
+
+                if (!expanded) {
+                  expand();
+                  return;
+                }
+
+                setCollapsing(expanded);
+                setTimeout(() => {
+                  setCollapsing(undefined);
+
+                  if (expanded === proposal.id) {
+                    setExpanded(undefined);
+                    return;
+                  }
+
+                  expand();
+                }, 100);
+              }}
             >
               <td>
-                <Link to={`proposals/${proposal.id}`} onClick={(e) => e.stopPropagation()}>{proposal.title}</Link>
+                <Link
+                  to={`proposals/${proposal.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {proposal.title}
+                </Link>
               </td>
               <td>5</td>
               <td>
