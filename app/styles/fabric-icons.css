@@ -3,7 +3,7 @@
 */
 @font-face {
   font-family: 'FabricMDL2Icons';
-  src: url('/fonts/fabric-icons-92590a9e.woff') format('woff');
+  src: url('/fonts/fabric-icons-5c32e469.woff') format('woff');
 }
 
 .ms-Icon {
@@ -17,3 +17,5 @@
 }
 
 .ms-Icon--ChevronDown:before { content: "\E70D"; }
+.ms-Icon--CaretSolidDown:before { content: "\F08E"; }
+.ms-Icon--CaretSolidUp:before { content: "\F090"; }

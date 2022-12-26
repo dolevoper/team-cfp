@@ -1,15 +1,43 @@
-[data-grid] li {
-    list-style: none;
+[data-grid] {
+    table-layout: fixed;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+[data-grid] caption {
+    text-align: start;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+}
+
+[data-grid] tbody {
     border-bottom: 1px solid var(--gray-20);
-    padding: 4px 16px 8px 16px;
-    margin-left: -16px;
-    margin-right: -16px;
+    display: block;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    [data-grid] li:hover {
+    [data-grid] tbody:hover {
         background: var(--gray-20);
     }
+}
+
+[data-grid] tbody tr {
+    display: flex;
+    align-items: baseline;
+}
+
+[data-grid] tbody tr:not([data-grid-row-details]) td:first-of-type {
+    flex: 1;
+}
+
+[data-grid] tbody [data-grid-row-details] {
+    justify-content: space-around;
+}
+
+[data-grid] tbody:not([data-expanded="true"]) [data-grid-row-details] {
+    display: none;
 }
 
 a[href="/proposals/new"] {
