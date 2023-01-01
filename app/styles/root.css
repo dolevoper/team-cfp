@@ -239,7 +239,8 @@ h2, h3, h4, h5, h6 {
     position: relative;
 }
 
-[data-user-menu] button {
+[data-user-menu] summary {
+    list-style: none;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -251,7 +252,7 @@ h2, h3, h4, h5, h6 {
     color: inherit;
 }
 
-[data-user-menu] button:active {
+[data-user-menu] summary:active {
     background: var(--primary-color-darker);
 }
 
@@ -271,7 +272,7 @@ h2, h3, h4, h5, h6 {
     padding: 16px;
 }
 
-[data-user-menu] button[aria-expanded="true"] + menu {
+[data-user-menu][open] menu {
     transform: none;
 }
 
@@ -288,7 +289,7 @@ h2, h3, h4, h5, h6 {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    [data-user-menu] button:hover {
+    [data-user-menu] summary:hover {
         background: var(--primary-color-dark-alt);
     }
 }
