@@ -41,35 +41,6 @@
     display: none;
 }
 
-@keyframes expand {
-    from {
-        transform: scaleY(0);
-        transform-origin: top;
-    }
-    to {
-        transform: none;
-    }
-}
-
-@keyframes collapse {
-    from {
-        transform: none;
-    }
-    to {
-        transform: scaleY(0);
-        transform-origin: top;
-    }
-}
-
-[data-grid] tbody[data-transition="enter"] [data-grid-row-details] {
-    animation: expand 100ms;
-}
-
-[data-grid] tbody[data-transition="leave"] [data-grid-row-details] {
-    animation: collapse 100ms;
-    transform: scaleY(0);
-}
-
 a[href="/proposals/new"] {
     margin: 16px 0;
     margin-left: auto;

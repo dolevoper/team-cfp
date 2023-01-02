@@ -9,14 +9,14 @@ function matchMedia(media: string, onServer = false) {
     return window.matchMedia(media).matches;
 }
 
-export function useIsDesktopMode() {
-    const [isDesktopMode, setIsDesktopMode] = useState(matchMedia(desktopMediaQuery));
+export function useMedia(media: string, onServer = false) {
+    const [match, setMatch] = useState(matchMedia(media, onServer));
 
     useEffect(() => {
-        const mql = window.matchMedia(desktopMediaQuery);
+        const mql = window.matchMedia(media);
 
         function listener(e: MediaQueryListEvent) {
-            setIsDesktopMode(e.matches);
+            setMatch(e.matches);
         }
 
         mql.addEventListener("change", listener);
@@ -24,10 +24,14 @@ export function useIsDesktopMode() {
         return () => {
             mql.removeEventListener("change", listener);
         };
-    }, []);
+    }, [media]);
 
-    return isDesktopMode;
+    return match;
 }
+
+export const useIsDesktopMode = () => useMedia(desktopMediaQuery);
+
+export const usePrefersReducedMotion = () => useMedia("(prefers-reduced-motion)");
 
 export function useToggle(initialState = false) {
     return useReducer((value) => !value, initialState);

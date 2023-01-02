@@ -294,6 +294,12 @@ h2, h3, h4, h5, h6 {
     }
 }
 
+@media (prefers-reduced-motion) {
+    [data-user-menu] menu {
+        transition: none;
+    }
+}
+
 /******************** Persona ********************/
 [data-persona] {
     --size: 1rem;
@@ -331,4 +337,40 @@ h2, h3, h4, h5, h6 {
 
 [data-icon-button]:active {
     color: var(--primary-color-darker);
+}
+
+/******************** Expandable ********************/
+@keyframes expand {
+    from {
+        transform: scaleY(0);
+        transform-origin: top;
+    }
+    to {
+        transform: none;
+    }
+}
+
+@keyframes collapse {
+    from {
+        transform: none;
+    }
+    to {
+        transform: scaleY(0);
+        transform-origin: top;
+    }
+}
+
+[data-expandable][data-transition="enter"] {
+    animation: expand 100ms;
+}
+
+[data-expandable][data-transition="exit"] {
+    animation: collapse 100ms;
+    transform: scaleY(0);
+}
+
+@media (prefers-reduced-motion) {
+    [data-expandable] {
+        animation: none !important;
+    }
 }

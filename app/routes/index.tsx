@@ -5,6 +5,7 @@ import { getAllProposals } from "~/utils/proposals.server";
 import stylesUrl from "~/styles/index.css";
 import { IconButton } from "~/components/IconButton";
 import { useState } from "react";
+import { usePrefersReducedMotion } from "~/utils/hooks";
 
 export const loader = async () =>
   json({
@@ -20,6 +21,7 @@ export default function Index() {
   const [expanded, setExpanded] = useState<string>();
   const [expanding, setExpanding] = useState<string>();
   const [collapsing, setCollapsing] = useState<string>();
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <>
@@ -32,7 +34,6 @@ export default function Index() {
           <tbody
             key={proposal.id}
             data-expanded={expanded === proposal.id}
-            data-transition={expanding === proposal.id ? "enter" : collapsing === proposal.id ? "leave" : undefined}
           >
             <tr
               onClick={() => {
@@ -41,6 +42,11 @@ export default function Index() {
                   setExpanding(proposal.id);
 
                   setTimeout(() => setExpanding(undefined), 100);
+                }
+
+                if (prefersReducedMotion) {
+                  setExpanded(expanded === proposal.id ? undefined : proposal.id);
+                  return;
                 }
 
                 if (!expanded) {
@@ -74,7 +80,7 @@ export default function Index() {
                 <IconButton iconName="CaretSolidUp" title="Up vote" />
               </td>
             </tr>
-            <tr data-grid-row-details>
+            <tr data-grid-row-details data-expandable data-transition={expanding === proposal.id ? "enter" : collapsing === proposal.id ? "exit" : undefined}>
               <td>{proposal.type}</td>
               <td>{proposal.length}</td>
             </tr>
