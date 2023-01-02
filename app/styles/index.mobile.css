@@ -1,0 +1,28 @@
+[data-grid] tbody {
+    border-bottom: 1px solid var(--gray-20);
+    display: block;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    [data-grid] tbody:hover {
+        background: var(--gray-20);
+    }
+}
+
+[data-grid] tbody tr {
+    display: flex;
+    align-items: baseline;
+}
+
+[data-grid] tbody tr:not([data-grid-row-details]) td:first-of-type {
+    flex: 1;
+}
+
+[data-grid] tbody [data-grid-row-details] {
+    justify-content: space-around;
+    will-change: transform;
+}
+
+[data-grid] tbody:not([data-expanded="true"]) [data-grid-row-details] {
+    display: none;
+}

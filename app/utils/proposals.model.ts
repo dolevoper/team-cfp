@@ -19,3 +19,9 @@ export interface Proposal {
     description: string;
     createdAt: Date;
 }
+
+export function formatProposalDate(createdAt: string) {
+    return new Intl.DateTimeFormat("en-US").format(
+        new Date(createdAt)
+    );
+}

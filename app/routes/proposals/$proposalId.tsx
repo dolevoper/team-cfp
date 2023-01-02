@@ -6,6 +6,7 @@ import { getProposalById } from "~/utils/proposals.server";
 import stylesUrl from "~/styles/proposals.details.css";
 import { users } from "~/utils/users.server";
 import { Persona } from "~/components/Persona";
+import { formatProposalDate } from "~/utils/proposals.model";
 
 export async function loader({ params: { proposalId } }: LoaderArgs) {
   const proposal = await getProposalById(proposalId!);
@@ -36,9 +37,7 @@ export default function ViewProposal() {
         <dt>Created</dt>
         <dd>
           <time dateTime={proposal.createdAt}>
-            {new Intl.DateTimeFormat("en-US").format(
-              new Date(proposal.createdAt)
-            )}
+            {formatProposalDate(proposal.createdAt)}
           </time>
         </dd>
         {proposedBy && (

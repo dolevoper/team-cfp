@@ -1,0 +1,25 @@
+[data-grid] tr {
+    border-bottom: 1px solid var(--gray-20);
+}
+
+[data-grid] th {
+    text-align: left;
+    user-select: none;
+    font-weight: 600;
+}
+
+[data-grid] th,
+[data-grid] td {
+    padding: 8px 16px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    [data-grid] th:hover,
+    [data-grid] tbody tr:hover {
+        background: var(--gray-20);
+    }
+}
+
+[data-grid] [data-icon-button] {
+    display: inline-block;
+}
