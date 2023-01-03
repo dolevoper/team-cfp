@@ -306,6 +306,7 @@ h2, h3, h4, h5, h6 {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    max-width: 100%;
 }
 
 [data-persona]::before {
@@ -319,6 +320,13 @@ h2, h3, h4, h5, h6 {
     line-height: var(--size);
     text-align: center;
     font-weight: 600;
+}
+
+[data-persona] span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 /******************** Icon Button ********************/

@@ -1,19 +1,21 @@
-import { ReactNode, useEffect, useState } from "react";
+import type { ReactNode} from "react";
+import { useEffect, useState } from "react";
 import type { LinksFunction, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getAllProposals } from "~/utils/proposals.server";
 import { IconButton } from "~/components/IconButton";
 import { useIsDesktopMode, usePrefersReducedMotion } from "~/utils/hooks";
-import { formatProposalDate, Proposal } from "~/utils/proposals.model";
+import { formatProposalDate } from "~/utils/proposals.model";
 import { notDesktopMediaQuery, desktopMediaQuery } from "~/utils/media-queries";
 import stylesUrl from "~/styles/index.css";
 import mobileStylesUrl from "~/styles/index.mobile.css";
 import desktopStylesUrl from "~/styles/index.desktop.css";
+import { Persona } from "~/components/Persona";
 
 export const loader = async () =>
   json({
-    proposals: await getAllProposals(),
+    proposals: await getAllProposals({ populate: { proposedBy: true } }),
   });
 
 export const links: LinksFunction = () => [
@@ -44,9 +46,7 @@ export default function Index() {
   );
 }
 
-type TableBodyProps = {
-  proposals: SerializeFrom<Proposal[]>;
-};
+type TableBodyProps = SerializeFrom<typeof loader>;
 
 function MobileTableBody({ proposals }: TableBodyProps) {
   const [expanded, setExpanded] = useState<string>();
@@ -133,6 +133,7 @@ function DesktopTableBody({ proposals }: TableBodyProps) {
           <th>Length</th>
           <th>Up voutes</th>
           <th>Created at</th>
+          <th>Proposed by</th>
         </tr>
       </thead>
       <tbody>
@@ -154,6 +155,7 @@ function DesktopTableBody({ proposals }: TableBodyProps) {
             <td>
               <time dateTime={proposal.createdAt}>{formatProposalDate(proposal.createdAt)}</time>
             </td>
+            <td>{proposal.proposedBy ? <Persona userData={proposal.proposedBy} /> : null}</td>
           </tr>
         ))}
       </tbody>

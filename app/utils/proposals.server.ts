@@ -1,4 +1,6 @@
 import type { Proposal } from "./proposals.model";
+import type { UserData } from "./session.server";
+import { users } from "./users.server";
 
 declare global {
     var __proposals: Proposal[];
@@ -26,8 +28,14 @@ export async function submitProposal(proposal: Omit<Proposal, "createdAt">) {
     proposals.push({ ...proposal, createdAt: new Date() });
 }
 
-export async function getAllProposals() {
-    return proposals.map((proposal) => ({ ...proposal }));
+type GetAllProposalsConfig = { populate?: Partial<Record<"proposedBy", boolean>> };
+export async function getAllProposals(config: { populate: { proposedBy: true } }): Promise<(Proposal & { proposedBy?: UserData })[]>;
+export async function getAllProposals(config?: { populate?: { proposedBy?: false } }): Promise<Proposal[]>;
+export async function getAllProposals({ populate }: GetAllProposalsConfig = {}): Promise<Proposal[] | (Proposal & { proposedBy: UserData })[]> {
+    return proposals.map((proposal) => populate?.proposedBy ? {
+        ...proposal,
+        proposedBy: { ...users.get(proposal.proposedByPrincipalId) }
+    } : { ...proposal });
 }
 
 export async function getProposalById(id: string): Promise<Proposal | undefined> {
