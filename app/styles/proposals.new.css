@@ -3,20 +3,3 @@ form {
     flex-direction: column;
     gap: 16px;
 }
-
-input, select, textarea {
-    width: 100%;
-}
-
-textarea {
-    resize: none;
-}
-
-label[for="title-input"] {
-    font-weight: 600;
-}
-
-label[for="title-input"]::after {
-    content: " *";
-    color: var(--red);
-}

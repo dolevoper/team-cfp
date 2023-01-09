@@ -4,6 +4,7 @@ import { redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 import * as uuid from "uuid";
 import { tabletMediaQuery } from "~/utils/media-queries";
+import type { Proposal } from "~/utils/proposals.model";
 import {
   isValidProposalLength,
   isValidProposalType,
@@ -74,8 +75,8 @@ export const action = async ({ request }: ActionArgs) => {
     id: uuid.v4(),
     title,
     proposedByPrincipalId: userData.principalId,
-    type,
-    length,
+    type: type as Proposal["type"],
+    length: length as Proposal["length"],
     description,
   });
 
@@ -91,60 +92,89 @@ export default function New() {
   const actionData = useActionData<typeof action>();
   const isDesktopMode = useIsDesktopMode();
 
+  const shouldDisplayValidation = Object.values(actionData?.fieldErrors ?? {}).some(Boolean) ? true : undefined;
+
   return (
     <>
       <header data-page-header>
         <h1>Submit proposal</h1>
         <Link to="/">Back</Link>
       </header>
-      <Form method="post">
-        <label htmlFor="title-input">Title</label>
-        <input
-          id="title-input"
-          name="title"
-          required
-          autoFocus
-          defaultValue={actionData?.fields?.title}
-        />
-        <label htmlFor="type-select">Type</label>
-        <Dropdown
-          name="type"
-          id="type-select"
-          defaultValue={actionData?.fields?.type}
-        >
-          {proposalTypes.map((value, i) =>
-            !value ? (
-              <Option key={i} displayText="">
-                <span data-visually-hidden={isDesktopMode ? true : undefined} style={{ color: "var(--red)" }}>Clear</span>
-              </Option>
-            ) : (
-              <Option key={i}>{value}</Option>
-            )
+      <Form method="post" noValidate data-display-validation={shouldDisplayValidation}>
+        <div data-field-wrapper>
+          <label htmlFor="title-input">Title</label>
+          <input
+            id="title-input"
+            name="title"
+            required
+            autoFocus
+            defaultValue={actionData?.fields?.title}
+          />
+          {actionData?.fieldErrors?.title && (
+            <p role="alert">{actionData.fieldErrors.title}</p>
           )}
-        </Dropdown>
-        <label htmlFor="length-select">Length</label>
-        <Dropdown
-          id="length-select"
-          name="length"
-          defaultValue={actionData?.fields?.length}
-        >
-          {proposalLengths.map((value, i) =>
-            !value ? (
-              <Option key={i} displayText="">
-                <span data-visually-hidden={isDesktopMode ? true : undefined} style={{ color: "var(--red)" }}>Clear</span>
-              </Option>
-            ) : (
-              <Option key={i}>{value}</Option>
-            )
+        </div>
+        <div data-field-wrapper>
+          <label htmlFor="type-select">Type</label>
+          <Dropdown
+            name="type"
+            id="type-select"
+            defaultValue={actionData?.fields?.type}
+          >
+            {proposalTypes.map((value, i) =>
+              !value ? (
+                <Option key={i} displayText="">
+                  <span
+                    data-visually-hidden={isDesktopMode ? true : undefined}
+                    style={{ color: "var(--red)" }}
+                  >
+                    Clear
+                  </span>
+                </Option>
+              ) : (
+                <Option key={i}>{value}</Option>
+              )
+            )}
+          </Dropdown>
+          {actionData?.fieldErrors?.type && (
+            <p role="alert">{actionData.fieldErrors.type}</p>
           )}
-        </Dropdown>
-        <label htmlFor="description-input">Description</label>
-        <textarea
-          id="description-input"
-          name="description"
-          rows={6}
-          defaultValue={actionData?.fields?.description}
-        />
+        </div>
+        <div data-field-wrapper>
+          <label htmlFor="length-select">Length</label>
+          <Dropdown
+            id="length-select"
+            name="length"
+            defaultValue={actionData?.fields?.length}
+          >
+            {proposalLengths.map((value, i) =>
+              !value ? (
+                <Option key={i} displayText="">
+                  <span
+                    data-visually-hidden={isDesktopMode ? true : undefined}
+                    style={{ color: "var(--red)" }}
+                  >
+                    Clear
+                  </span>
+                </Option>
+              ) : (
+                <Option key={i}>{value}</Option>
+              )
+            )}
+          </Dropdown>
+          {actionData?.fieldErrors?.length && (
+            <p role="alert">{actionData.fieldErrors.length}</p>
+          )}
+        </div>
+        <div data-field-wrapper>
+          <label htmlFor="description-input">Description</label>
+          <textarea
+            id="description-input"
+            name="description"
+            rows={6}
+            defaultValue={actionData?.fields?.description}
+          />
+        </div>
         <button type="submit" data-button-primary>
           Submit
         </button>

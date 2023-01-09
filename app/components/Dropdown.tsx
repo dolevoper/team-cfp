@@ -148,7 +148,7 @@ export function Dropdown({
           ref={selectRef}
           onChange={(e) => setValue(e.target.value)}
           onMouseDown={(e) => {
-            if (!dialogsPortal && !isDesktopMode) {
+            if ((!dialogsPortal && !isDesktopMode) || e.button !== 0) {
               return;
             }
 
