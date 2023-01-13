@@ -4,14 +4,14 @@ import type { LinksFunction, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getAllProposals } from "~/utils/proposals.server";
-import { IconButton } from "~/components/IconButton";
+import { IconButton, links as iconButtonLinks } from "~/components/IconButton";
 import { useIsDesktopMode, usePrefersReducedMotion } from "~/utils/hooks";
 import { formatProposalDate } from "~/utils/proposals.model";
 import { notDesktopMediaQuery, desktopMediaQuery } from "~/utils/media-queries";
 import stylesUrl from "~/styles/index.css";
 import mobileStylesUrl from "~/styles/index.mobile.css";
 import desktopStylesUrl from "~/styles/index.desktop.css";
-import { Persona } from "~/components/Persona";
+import { Persona, links as personaLinks } from "~/components/Persona";
 
 export const loader = async () =>
   json({
@@ -19,6 +19,8 @@ export const loader = async () =>
   });
 
 export const links: LinksFunction = () => [
+  ...iconButtonLinks(),
+  ...personaLinks(),
   { rel: "stylesheet", href: stylesUrl },
   { rel: "stylesheet", href: mobileStylesUrl, media: notDesktopMediaQuery },
   { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery }

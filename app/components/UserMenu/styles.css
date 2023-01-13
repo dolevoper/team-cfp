@@ -1,0 +1,52 @@
+[data-user-menu] {
+    position: relative;
+}
+
+[data-user-menu] summary {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+
+[data-user-menu] summary:active {
+    background: var(--primary-color-darker);
+}
+
+[data-user-menu] menu {
+    transform: scaleY(0);
+    transform-origin: top;
+    will-change: transform;
+    transition: transform 100ms;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100vw;
+    box-shadow: var(--depth-8);
+    background: white;
+    color: black;
+    list-style: none;
+    padding: 16px;
+}
+
+[data-user-menu][open] menu {
+    transform: none;
+}
+
+[data-user-menu] menu hgroup {
+    text-align: center;
+}
+
+[data-user-menu] menu hgroup p::before {
+    content: "(";
+}
+
+[data-user-menu] menu hgroup p::after {
+    content: ")";
+}

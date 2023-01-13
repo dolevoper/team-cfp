@@ -1,3 +1,4 @@
+import type { LinksFunction } from "@remix-run/node";
 import type {
   Dispatch,
   DispatchWithoutAction,
@@ -16,7 +17,17 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { useIsDesktopMode, useToggle } from "~/utils/hooks";
-import Icon from "./Icon";
+import { desktopMediaQuery, hover } from "~/utils/media-queries";
+import Icon from "../Icon";
+import stylesUrl from "./styles.css";
+import desktopStylesUrl from "./styles.desktop.css";
+import hoverStylesUrl from "./styles.hover.css";
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesUrl },
+  { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery },
+  { rel: "stylesheet", href: hoverStylesUrl, media: hover }
+];
 
 type OptionDef = { id: string; value: string | number; element: ReactNode };
 type DropdownContext = {

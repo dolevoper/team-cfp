@@ -1,0 +1,64 @@
+[data-dropdown] {
+    position: relative;
+}
+
+[data-dropdown] select {
+    cursor: pointer;
+}
+
+[data-dropdown] [data-icon] {
+    --icon-size: 0.75rem;
+    position: absolute;
+    right: 8px;
+    top: 0;
+    bottom: 0;
+    height: var(--icon-size);
+    margin: auto;
+    color: var(--gray-130);
+    font-size: var(--icon-size);
+    pointer-events: none;
+}
+
+[data-dropdown-backdrop] {
+    position: fixed;
+    inset: 0;
+    background: black;
+    will-change: opacity;
+    opacity: 0;
+    transition: opacity 100ms;
+    pointer-events: none;
+}
+
+[data-dropdown-backdrop][data-is-open="true"] {
+    opacity: 0.3;
+    pointer-events: revert;
+}
+
+[data-dropdown-options] {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    will-change: transform;
+    transform: translateY(100%);
+    transform-origin: top;
+    transition: transform 100ms ease-in;
+    list-style: none;
+}
+
+[data-dropdown-options][data-is-open="true"] {
+    transform: none;
+    transition-timing-function: ease-out;
+}
+
+[data-dropdown-options] [data-dropdown-option] {
+    min-height: 2.0833333rem;
+    cursor: pointer;
+    text-align: center;
+    padding: 9px 8px
+}
+
+[data-dropdown-options] [data-dropdown-option][aria-selected="true"] {
+    background: var(--gray-30);
+}

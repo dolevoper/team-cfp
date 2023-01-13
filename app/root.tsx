@@ -15,7 +15,7 @@ import desktopStylesUrl from "~/styles/root.desktop.css";
 import iconsStylesUrl from "~/styles/fabric-icons.css";
 import { desktopMediaQuery } from "~/utils/media-queries";
 import { getUserData } from "~/utils/session.server";
-import { UserMenu } from "~/components/UserMenu";
+import { UserMenu, links as userMenuLinks } from "~/components/UserMenu/UserMenu";
 import { users } from "~/utils/users.server";
 
 export const loader = ({ request }: LoaderArgs) => {
@@ -33,6 +33,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export const links: LinksFunction = () => [
+  ...userMenuLinks(),
   { rel: "stylesheet", href: stylesUrl },
   { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery },
   { rel: "stylesheet", href: iconsStylesUrl }

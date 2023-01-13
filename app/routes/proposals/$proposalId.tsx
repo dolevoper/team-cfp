@@ -5,7 +5,7 @@ import { Link, useCatch, useLoaderData } from "@remix-run/react";
 import { getProposalById } from "~/utils/proposals.server";
 import stylesUrl from "~/styles/proposals.details.css";
 import { users } from "~/utils/users.server";
-import { Persona } from "~/components/Persona";
+import { Persona, links as personaLinks } from "~/components/Persona";
 import { formatProposalDate } from "~/utils/proposals.model";
 
 export async function loader({ params: { proposalId } }: LoaderArgs) {
@@ -21,6 +21,7 @@ export async function loader({ params: { proposalId } }: LoaderArgs) {
 }
 
 export const links: LinksFunction = () => [
+  ...personaLinks(),
   { rel: "stylesheet", href: stylesUrl },
 ];
 

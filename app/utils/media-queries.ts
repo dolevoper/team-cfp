@@ -4,3 +4,4 @@ export const desktopMediaQuery = `(min-width: ${1500 / 16}rem)`;
 export const notDesktopMediaQuery = `(max-width: ${1499 / 16}rem)`;
 
 export const preferesReducedMotion = "(prefers-reduced-motion: reduce)";
+export const hover = "(hover: hover) and (pointer: fine)";

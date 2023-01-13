@@ -1,0 +1,10 @@
+[data-icon-button] {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+
+[data-icon-button]:active {
+    color: var(--primary-color-darker);
+}

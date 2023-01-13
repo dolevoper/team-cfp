@@ -11,26 +11,3 @@ main {
 [data-page-header] {
     margin-bottom: 64px;
 }
-
-/******************** Dropdown ********************/
-[data-dropdown] [data-dropdown-options] {
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    bottom: revert;
-    left: revert;
-    transform: scaleY(0);
-    transform-origin: top;
-    will-change: transform;
-    transition: transform 100ms;
-    box-shadow: var(--depth-8);
-}
-
-[data-dropdown] select[aria-expanded="true"] + [data-icon] + [data-dropdown-options] {
-    transform: none;
-}
-
-/******************** User Panel ********************/
-[data-user-menu] menu {
-    width: auto;
-}

@@ -1,7 +1,21 @@
-import { Link } from "@remix-run/react";
 import { useId, useRef } from "react";
+import type { LinksFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 import type { UserData } from "~/utils/session.server";
-import { Persona } from "./Persona";
+import { desktopMediaQuery, hover, preferesReducedMotion } from "~/utils/media-queries";
+import { Persona, links as personaLinks } from "../Persona";
+import stylesUrl from "./styles.css";
+import desktopStylesUrl from "./styles.desktop.css";
+import hoverStylesUrl from "./styles.hover.css";
+import reducedMotionStylesUrl from "./styles.reduced-motion.css";
+
+export const links: LinksFunction = () => [
+  ...personaLinks(),
+  { rel: "stylesheet", href: stylesUrl },
+  { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery },
+  { rel: "stylesheet", href: hoverStylesUrl, media: hover },
+  { rel: "stylesheet", href: reducedMotionStylesUrl, media: preferesReducedMotion }
+];
 
 type UserMenuProps = { user: UserData };
 export function UserMenu({ user }: UserMenuProps) {

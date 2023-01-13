@@ -1,0 +1,27 @@
+[data-persona] {
+    --size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+}
+
+[data-persona]::before {
+    content: attr(data-initials);
+    background-color: var(--magenta-20);
+    color: white;
+    border-radius: 50%;
+    font-size: calc(var(--size) / 2);
+    width: var(--size);
+    height: var(--size);
+    line-height: var(--size);
+    text-align: center;
+    font-weight: 600;
+}
+
+[data-persona] span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}

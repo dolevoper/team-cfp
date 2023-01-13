@@ -14,7 +14,7 @@ import {
 import { submitProposal } from "~/utils/proposals.server";
 import stylesUrl from "~/styles/proposals.new.css";
 import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
-import { Dropdown, Option } from "~/components/Dropdown";
+import { Dropdown, Option, links as dropdownLinks } from "~/components/Dropdown/Dropdown";
 import { useIsDesktopMode } from "~/utils/hooks";
 import { getUserData } from "~/utils/session.server";
 
@@ -84,6 +84,7 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export const links: LinksFunction = () => [
+  ...dropdownLinks(),
   { rel: "stylesheet", href: stylesUrl },
   { rel: "stylesheet", href: tabletStylesUrl, media: tabletMediaQuery },
 ];
