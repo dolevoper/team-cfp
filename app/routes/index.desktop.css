@@ -10,7 +10,7 @@
 
 [data-grid] th,
 [data-grid] td {
-    padding: 8px 16px;
+    padding: var(--spacing-1) var(--spacing-2);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -9,7 +9,7 @@
 [data-dropdown] [data-icon] {
     --icon-size: 0.75rem;
     position: absolute;
-    right: 8px;
+    right: var(--spacing-1);
     top: 0;
     bottom: 0;
     height: var(--icon-size);
@@ -56,7 +56,7 @@
     min-height: 2.0833333rem;
     cursor: pointer;
     text-align: center;
-    padding: 9px 8px
+    padding: 9px var(--spacing-1);
 }
 
 [data-dropdown-options] [data-dropdown-option][aria-selected="true"] {

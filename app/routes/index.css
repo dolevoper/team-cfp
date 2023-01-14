@@ -9,11 +9,12 @@
     text-align: start;
     font-size: 1.2rem;
     font-weight: 600;
-    margin: 0 0 16px 0;
+    margin: 0;
+    margin-bottom: var(--spacing-2);
 }
 
 a[href="/proposals/new"] {
-    margin: 16px 0;
+    margin: var(--spacing-2) 0;
     margin-left: auto;
-    padding-top: 10px;
+    padding-top: var(--spacing-1-5);
 }

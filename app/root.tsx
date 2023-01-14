@@ -10,13 +10,14 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import stylesUrl from "~/styles/root.css";
-import desktopStylesUrl from "~/styles/root.desktop.css";
-import iconsStylesUrl from "~/styles/fabric-icons.css";
 import { desktopMediaQuery } from "~/utils/media-queries";
 import { getUserData } from "~/utils/session.server";
 import { UserMenu, links as userMenuLinks } from "~/components/UserMenu/UserMenu";
 import { users } from "~/utils/users.server";
+import iconsStylesUrl from "~/styles/fabric-icons.css";
+import tokensStylesUrl from "~/styles/tokens.css";
+import stylesUrl from "~/styles/root.css";
+import desktopStylesUrl from "~/styles/root.desktop.css";
 
 export const loader = ({ request }: LoaderArgs) => {
   const user = getUserData(request);
@@ -34,9 +35,10 @@ export const meta: MetaFunction = () => ({
 
 export const links: LinksFunction = () => [
   ...userMenuLinks(),
+  { rel: "stylesheet", href: iconsStylesUrl },
+  { rel: "stylesheet", href: tokensStylesUrl },
   { rel: "stylesheet", href: stylesUrl },
   { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery },
-  { rel: "stylesheet", href: iconsStylesUrl }
 ];
 
 export default function App() {

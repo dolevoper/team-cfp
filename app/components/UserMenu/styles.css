@@ -32,7 +32,7 @@
     background: white;
     color: black;
     list-style: none;
-    padding: 16px;
+    padding: var(--spacing-2);
 }
 
 [data-user-menu][open] menu {
