@@ -22,8 +22,8 @@ import {
   ButtonPrimary,
   links as buttonPrimaryLinks,
 } from "~/components/ButtonPrimary/ButtonPrimary";
-import stylesUrl from "~/styles/proposals.new.css";
-import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
+import stylesUrl from "./new.css";
+import tabletStylesUrl from "./new.tablet.css";
 
 const listFormatter = new Intl.ListFormat("en", { type: "disjunction" });
 const quote = (str: string) => `"${str}"`;

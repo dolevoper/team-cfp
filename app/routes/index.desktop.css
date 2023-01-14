@@ -11,6 +11,13 @@
 [data-grid] th,
 [data-grid] td {
     padding: 8px 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+[data-grid] [data-icon-button] {
+    display: inline-block;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -18,8 +25,4 @@
     [data-grid] tbody tr:hover {
         background: var(--gray-20);
     }
-}
-
-[data-grid] [data-icon-button] {
-    display: inline-block;
 }

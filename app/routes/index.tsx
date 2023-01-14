@@ -7,15 +7,18 @@ import { getAllProposals } from "~/utils/proposals.server";
 import { IconButton, links as iconButtonLinks } from "~/components/IconButton";
 import { useIsDesktopMode, usePrefersReducedMotion } from "~/utils/hooks";
 import { formatProposalDate } from "~/utils/proposals.model";
-import { notDesktopMediaQuery, desktopMediaQuery } from "~/utils/media-queries";
-import stylesUrl from "~/styles/index.css";
-import mobileStylesUrl from "~/styles/index.mobile.css";
-import desktopStylesUrl from "~/styles/index.desktop.css";
+import {
+  notDesktopMediaQuery,
+  desktopMediaQuery,
+} from "~/utils/media-queries";
 import { Persona, links as personaLinks } from "~/components/Persona";
 import {
   ButtonPrimary,
   links as buttonPrimaryLinks,
 } from "~/components/ButtonPrimary/ButtonPrimary";
+import stylesUrl from "./index.css";
+import mobileStylesUrl from "./index.mobile.css";
+import desktopStylesUrl from "./index.desktop.css";
 
 export const loader = async () =>
   json({
@@ -107,6 +110,7 @@ function MobileTableBody({ proposals }: TableBodyProps) {
               <Link
                 to={`proposals/${proposal.id}`}
                 onClick={(e) => e.stopPropagation()}
+                title={proposal.title}
               >
                 {proposal.title}
               </Link>
@@ -156,6 +160,7 @@ function DesktopTableBody({ proposals }: TableBodyProps) {
               <Link
                 to={`proposals/${proposal.id}`}
                 onClick={(e) => e.stopPropagation()}
+                title={proposal.title}
               >
                 {proposal.title}
               </Link>

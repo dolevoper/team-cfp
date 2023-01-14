@@ -17,6 +17,8 @@
     line-height: var(--size);
     text-align: center;
     font-weight: 600;
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 
 [data-persona] span {

@@ -3,12 +3,6 @@
     display: block;
 }
 
-@media (hover: hover) and (pointer: fine) {
-    [data-grid] tbody:hover {
-        background: var(--gray-20);
-    }
-}
-
 [data-grid] tbody tr {
     display: flex;
     align-items: baseline;
@@ -25,4 +19,10 @@
 
 [data-grid] tbody:not([data-expanded="true"]) [data-grid-row-details] {
     display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    [data-grid] tbody:hover {
+        background: var(--gray-20);
+    }
 }

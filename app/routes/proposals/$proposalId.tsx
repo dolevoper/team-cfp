@@ -3,10 +3,10 @@ import { Response } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useCatch, useLoaderData } from "@remix-run/react";
 import { getProposalById } from "~/utils/proposals.server";
-import stylesUrl from "~/styles/proposals.details.css";
 import { users } from "~/utils/users.server";
 import { Persona, links as personaLinks } from "~/components/Persona";
 import { formatProposalDate } from "~/utils/proposals.model";
+import stylesUrl from "./proposalId.css";
 
 export async function loader({ params: { proposalId } }: LoaderArgs) {
   const proposal = await getProposalById(proposalId!);
