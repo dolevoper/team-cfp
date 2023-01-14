@@ -1,6 +1,5 @@
 import type { ActionArgs, LinksFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 import * as uuid from "uuid";
 import { tabletMediaQuery } from "~/utils/media-queries";
@@ -12,11 +11,19 @@ import {
   proposalTypes,
 } from "~/utils/proposals.model";
 import { submitProposal } from "~/utils/proposals.server";
-import stylesUrl from "~/styles/proposals.new.css";
-import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
-import { Dropdown, Option, links as dropdownLinks } from "~/components/Dropdown/Dropdown";
 import { useIsDesktopMode } from "~/utils/hooks";
 import { getUserData } from "~/utils/session.server";
+import {
+  Dropdown,
+  Option,
+  links as dropdownLinks,
+} from "~/components/Dropdown/Dropdown";
+import {
+  ButtonPrimary,
+  links as buttonPrimaryLinks,
+} from "~/components/ButtonPrimary/ButtonPrimary";
+import stylesUrl from "~/styles/proposals.new.css";
+import tabletStylesUrl from "~/styles/proposals.new.tablet.css";
 
 const listFormatter = new Intl.ListFormat("en", { type: "disjunction" });
 const quote = (str: string) => `"${str}"`;
@@ -85,6 +92,7 @@ export const action = async ({ request }: ActionArgs) => {
 
 export const links: LinksFunction = () => [
   ...dropdownLinks(),
+  ...buttonPrimaryLinks(),
   { rel: "stylesheet", href: stylesUrl },
   { rel: "stylesheet", href: tabletStylesUrl, media: tabletMediaQuery },
 ];
@@ -93,7 +101,11 @@ export default function New() {
   const actionData = useActionData<typeof action>();
   const isDesktopMode = useIsDesktopMode();
 
-  const shouldDisplayValidation = Object.values(actionData?.fieldErrors ?? {}).some(Boolean) ? true : undefined;
+  const shouldDisplayValidation = Object.values(
+    actionData?.fieldErrors ?? {}
+  ).some(Boolean)
+    ? true
+    : undefined;
 
   return (
     <>
@@ -101,7 +113,11 @@ export default function New() {
         <h1>Submit proposal</h1>
         <Link to="/">Back</Link>
       </header>
-      <Form method="post" noValidate data-display-validation={shouldDisplayValidation}>
+      <Form
+        method="post"
+        noValidate
+        data-display-validation={shouldDisplayValidation}
+      >
         <div data-field-wrapper>
           <label htmlFor="title-input">Title</label>
           <input
@@ -176,9 +192,7 @@ export default function New() {
             defaultValue={actionData?.fields?.description}
           />
         </div>
-        <button type="submit" data-button-primary>
-          Submit
-        </button>
+        <ButtonPrimary type="submit">Submit</ButtonPrimary>
       </Form>
     </>
   );

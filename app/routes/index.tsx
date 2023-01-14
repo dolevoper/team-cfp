@@ -1,4 +1,4 @@
-import type { ReactNode} from "react";
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import type { LinksFunction, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -12,6 +12,10 @@ import stylesUrl from "~/styles/index.css";
 import mobileStylesUrl from "~/styles/index.mobile.css";
 import desktopStylesUrl from "~/styles/index.desktop.css";
 import { Persona, links as personaLinks } from "~/components/Persona";
+import {
+  ButtonPrimary,
+  links as buttonPrimaryLinks,
+} from "~/components/ButtonPrimary/ButtonPrimary";
 
 export const loader = async () =>
   json({
@@ -21,25 +25,32 @@ export const loader = async () =>
 export const links: LinksFunction = () => [
   ...iconButtonLinks(),
   ...personaLinks(),
+  ...buttonPrimaryLinks(),
   { rel: "stylesheet", href: stylesUrl },
   { rel: "stylesheet", href: mobileStylesUrl, media: notDesktopMediaQuery },
-  { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery }
+  { rel: "stylesheet", href: desktopStylesUrl, media: desktopMediaQuery },
 ];
 
 export default function Index() {
   const { proposals } = useLoaderData<typeof loader>();
   const isDesktopMode = useIsDesktopMode();
-  const [tableBody, setTableBody] = useState<ReactNode>(<MobileTableBody proposals={proposals} />);
+  const [tableBody, setTableBody] = useState<ReactNode>(
+    <MobileTableBody proposals={proposals} />
+  );
 
   useEffect(() => {
-    setTableBody(isDesktopMode ? <DesktopTableBody proposals={proposals} /> : <MobileTableBody proposals={proposals} />);
+    setTableBody(
+      isDesktopMode ? (
+        <DesktopTableBody proposals={proposals} />
+      ) : (
+        <MobileTableBody proposals={proposals} />
+      )
+    );
   }, [isDesktopMode, proposals]);
 
   return (
     <>
-      <Link to="proposals/new" data-button-primary>
-        Submit proposal
-      </Link>
+      <ButtonPrimary to="proposals/new">Submit proposal</ButtonPrimary>
       <table data-grid>
         <caption>Proposals</caption>
         {tableBody}
@@ -155,9 +166,15 @@ function DesktopTableBody({ proposals }: TableBodyProps) {
               5 <IconButton iconName="CaretSolidUp" title="Up vote" />
             </td>
             <td>
-              <time dateTime={proposal.createdAt}>{formatProposalDate(proposal.createdAt)}</time>
+              <time dateTime={proposal.createdAt}>
+                {formatProposalDate(proposal.createdAt)}
+              </time>
             </td>
-            <td>{proposal.proposedBy ? <Persona userData={proposal.proposedBy} /> : null}</td>
+            <td>
+              {proposal.proposedBy ? (
+                <Persona userData={proposal.proposedBy} />
+              ) : null}
+            </td>
           </tr>
         ))}
       </tbody>

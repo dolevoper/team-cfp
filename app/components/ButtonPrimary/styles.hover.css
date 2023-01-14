@@ -1,0 +1,7 @@
+[data-button-primary]:hover {
+    background: var(--primary-color-dark-alt);
+}
+
+a[data-button-primary]:hover {
+    text-decoration: none;
+}
