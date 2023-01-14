@@ -22,6 +22,7 @@ import {
   ButtonPrimary,
   links as buttonPrimaryLinks,
 } from "~/components/ButtonPrimary/ButtonPrimary";
+import { PageHeader, links as pageHeaderLinks } from "~/components/PageHeader";
 import stylesUrl from "./new.css";
 import tabletStylesUrl from "./new.tablet.css";
 
@@ -93,6 +94,7 @@ export const action = async ({ request }: ActionArgs) => {
 export const links: LinksFunction = () => [
   ...dropdownLinks(),
   ...buttonPrimaryLinks(),
+  ...pageHeaderLinks(),
   { rel: "stylesheet", href: stylesUrl },
   { rel: "stylesheet", href: tabletStylesUrl, media: tabletMediaQuery },
 ];
@@ -109,10 +111,7 @@ export default function New() {
 
   return (
     <>
-      <header data-page-header>
-        <h1>Submit proposal</h1>
-        <Link to="/">Back</Link>
-      </header>
+      <PageHeader title="Submit proposal" />
       <Form
         method="post"
         noValidate

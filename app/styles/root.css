@@ -163,11 +163,6 @@ label:has(+ [required])::after {
     color: white;
 }
 
-/******************** Page Header ********************/
-[data-page-header] {
-    margin-bottom: 14px;
-}
-
 /******************** Expandable ********************/
 @keyframes expand {
     from {

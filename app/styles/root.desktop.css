@@ -6,8 +6,3 @@ main {
     box-shadow: var(--depth-4);
     flex: none;
 }
-
-/******************** Page Header ********************/
-[data-page-header] {
-    margin-bottom: 64px;
-}

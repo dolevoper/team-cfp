@@ -6,6 +6,7 @@ import { getProposalById } from "~/utils/proposals.server";
 import { users } from "~/utils/users.server";
 import { Persona, links as personaLinks } from "~/components/Persona";
 import { formatProposalDate } from "~/utils/proposals.model";
+import { PageHeader, links as pageHeaderLinks } from "~/components/PageHeader";
 import stylesUrl from "./proposalId.css";
 
 export async function loader({ params: { proposalId } }: LoaderArgs) {
@@ -22,6 +23,7 @@ export async function loader({ params: { proposalId } }: LoaderArgs) {
 
 export const links: LinksFunction = () => [
   ...personaLinks(),
+  ...pageHeaderLinks(),
   { rel: "stylesheet", href: stylesUrl },
 ];
 
@@ -30,10 +32,7 @@ export default function ViewProposal() {
 
   return (
     <>
-      <header data-page-header>
-        <h1>{proposal.title}</h1>
-        <Link to="/">Back</Link>
-      </header>
+      <PageHeader title={proposal.title} />
       <dl>
         <dt>Created</dt>
         <dd>

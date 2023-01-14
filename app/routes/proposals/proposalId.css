@@ -6,7 +6,7 @@ dl {
     display: grid;
     grid-template-columns: max-content auto;
     gap: 8px 32px;
-    margin: 64px 0;
+    margin-bottom: 64px;
     font-size: 0.8rem;
 }
 
