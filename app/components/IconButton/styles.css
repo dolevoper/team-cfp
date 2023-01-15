@@ -8,3 +8,9 @@
 [data-icon-button]:active {
     color: var(--primary-color-darker);
 }
+
+@media (hover: hover) and (pointer: fine) {
+    [data-icon-button]:hover {
+        color: var(--primary-color-dark-alt);
+    }
+}

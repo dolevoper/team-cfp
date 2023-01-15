@@ -50,3 +50,9 @@
 [data-user-menu] menu hgroup p::after {
     content: ")";
 }
+
+@media (hover: hover) and (pointer: fine) {
+    [data-user-menu] summary:hover {
+        background: var(--primary-color-dark-alt);
+    }    
+}

@@ -2,13 +2,10 @@ import type { ComponentProps, ForwardedRef } from "react";
 import { forwardRef } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import { hover } from "~/utils/media-queries";
 import stylesUrl from "./styles.css";
-import hoverStylesUrl from "./styles.hover.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesUrl },
-  { rel: "stylesheet", href: hoverStylesUrl, media: hover },
 ];
 
 type ButtonProps = JSX.IntrinsicElements["button"] & { to?: undefined };

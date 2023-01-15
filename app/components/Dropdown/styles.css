@@ -62,3 +62,9 @@
 [data-dropdown-options] [data-dropdown-option][aria-selected="true"] {
     background: var(--gray-30);
 }
+
+@media (hover: hover) and (pointer: fine) {
+    [data-dropdown-options] [data-dropdown-option]:hover {
+        background: var(--gray-20);
+    }
+}

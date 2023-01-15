@@ -15,3 +15,13 @@
 [data-button-primary]:active {
     background: var(--primary-color-darker);
 }
+
+@media (hover: hover) and (pointer: fine) {
+    [data-button-primary]:hover {
+        background: var(--primary-color-dark-alt);
+    }
+
+    a[data-button-primary]:hover {
+        text-decoration: none;
+    }
+}
