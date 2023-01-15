@@ -16,9 +16,9 @@ import {
   ButtonPrimary,
   links as buttonPrimaryLinks,
 } from "~/components/ButtonPrimary/ButtonPrimary";
-import stylesUrl from "./index.css";
-import mobileStylesUrl from "./index.mobile.css";
-import desktopStylesUrl from "./index.desktop.css";
+import stylesUrl from "~/styles/index.css";
+import mobileStylesUrl from "~/styles/index.mobile.css";
+import desktopStylesUrl from "~/styles/index.desktop.css";
 
 export const loader = async () =>
   json({

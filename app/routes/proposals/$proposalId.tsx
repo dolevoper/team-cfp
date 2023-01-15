@@ -7,7 +7,7 @@ import { users } from "~/utils/users.server";
 import { Persona, links as personaLinks } from "~/components/Persona";
 import { formatProposalDate } from "~/utils/proposals.model";
 import { PageHeader, links as pageHeaderLinks } from "~/components/PageHeader";
-import stylesUrl from "./proposalId.css";
+import stylesUrl from "~/styles/proposals/$proposalId.css";
 
 export async function loader({ params: { proposalId } }: LoaderArgs) {
   const proposal = await getProposalById(proposalId!);

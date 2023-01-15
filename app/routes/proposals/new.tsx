@@ -1,6 +1,6 @@
 import type { ActionArgs, LinksFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import * as uuid from "uuid";
 import { tabletMediaQuery } from "~/utils/media-queries";
 import type { Proposal } from "~/utils/proposals.model";
@@ -23,8 +23,8 @@ import {
   links as buttonPrimaryLinks,
 } from "~/components/ButtonPrimary/ButtonPrimary";
 import { PageHeader, links as pageHeaderLinks } from "~/components/PageHeader";
-import stylesUrl from "./new.css";
-import tabletStylesUrl from "./new.tablet.css";
+import stylesUrl from "~/styles/proposals/new.css";
+import tabletStylesUrl from "~/styles/proposals/new.tablet.css";
 
 const listFormatter = new Intl.ListFormat("en", { type: "disjunction" });
 const quote = (str: string) => `"${str}"`;
